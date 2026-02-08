@@ -1,0 +1,3495 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PRIVATE APK — حدس عدد (نسخه نهایی + DARK_GPT کامل)</title>
+<style>
+/* ———————————————————————————————
+   متغیرها و رنگ‌های پایه
+——————————————————————————————— */
+:root{
+  --bg:#000000;
+  --bg-blue:#00121f;
+  --bg-green:#00140f;
+  --bg-yellow:#1a1500;
+  --bg-red:#1f0000;
+
+  --panel:#0b0d14;
+  --panel2:#11131a;
+  --text:#e6f3ff;
+
+  --accent:#00f5ff;
+  --accent2:#00ff88;
+  --accent3:#ffdd55;
+  --accent4:#ff5555;
+
+  --warn:#ffdd55;
+  --danger:#ff3b3b;
+  --good:#32ff7e;
+
+  --shadow:0 12px 34px rgba(0,0,0,.5);
+  --borderA:rgba(0,245,255,.26);
+  --borderB:rgba(0,255,136,.22);
+  --borderC:rgba(255,85,85,.26);
+}
+
+/* ———————————————————————————————
+   مودال انتخاب زبان با دکمه‌های نئونی و خطوط متحرک
+——————————————————————————————— */
+.lang-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.lang-modal.hidden {
+  display: none;
+}
+
+/* خطوط متحرک پشت مودال */
+.lang-modal::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: 
+    linear-gradient(90deg, transparent 50%, rgba(0,245,255,0.05) 50%),
+    linear-gradient(transparent 50%, rgba(0,255,136,0.05) 50%);
+  background-size: 60px 60px;
+  animation: langGridMove 20s linear infinite;
+  z-index: -1;
+}
+
+@keyframes langGridMove {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-30px, -30px) rotate(0.5deg); }
+}
+
+.lang-container {
+  background: linear-gradient(180deg, rgba(10,12,20,0.95), rgba(5,7,15,0.98));
+  border: 2px solid var(--accent);
+  border-radius: 24px;
+  padding: 40px 30px;
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 
+    0 20px 60px rgba(0,245,255,0.3),
+    0 0 100px rgba(0,255,136,0.2),
+    inset 0 0 50px rgba(0,245,255,0.1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+/* افکت نئونی دور کانتینر */
+.lang-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00f5ff, #00ff88, #ff5555, #00f5ff);
+  border-radius: 26px;
+  z-index: -1;
+  filter: blur(10px);
+  opacity: 0.5;
+  animation: langBorderGlow 3s linear infinite;
+}
+
+@keyframes langBorderGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+.lang-title {
+  font-size: 32px;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #00f5ff, #00ff88, #ff5555);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 900;
+  text-shadow: 0 0 20px rgba(0,245,255,0.5);
+  letter-spacing: 1px;
+}
+
+.lang-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 30px 0;
+}
+
+@media (max-width: 600px) {
+  .lang-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* دکمه‌های نئونی برای زبان */
+.lang-btn-neon {
+  position: relative;
+  border: none;
+  border-radius: 16px;
+  padding: 20px 15px;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #001316;
+  background: linear-gradient(135deg, #00f5ff 0%, #00ff88 50%, #ff5555 100%);
+  box-shadow: 
+    0 10px 30px rgba(0,245,255,0.3),
+    0 0 20px rgba(0,255,136,0.2);
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* افکت هاله نور */
+.lang-btn-neon::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(45deg, #00f5ff, #00ff88, #ff5555, #00f5ff);
+  border-radius: 20px;
+  z-index: -1;
+  filter: blur(15px);
+  opacity: 0.6;
+  animation: btnPulse 2s infinite;
+}
+
+@keyframes btnPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.02); }
+}
+
+/* خطوط متحرک روی دکمه */
+.lang-btn-neon::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.lang-btn-neon:hover::after {
+  left: 100%;
+}
+
+.lang-btn-neon:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 
+    0 15px 40px rgba(0,245,255,0.4),
+    0 0 30px rgba(0,255,136,0.3);
+}
+
+.lang-btn-neon:active {
+  transform: translateY(0) scale(1);
+}
+
+.lang-btn-neon .flag {
+  font-size: 36px;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+
+.lang-btn-neon .lang-name {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+/* رنگ‌های مختلف برای دکمه‌های زبان */
+.lang-btn-neon.english {
+  background: linear-gradient(135deg, #00f5ff 0%, #0077ff 100%);
+}
+
+.lang-btn-neon.persian {
+  background: linear-gradient(135deg, #ff5555 0%, #ff00aa 100%);
+}
+
+.lang-btn-neon.arabic {
+  background: linear-gradient(135deg, #00ff88 0%, #00aa55 100%);
+}
+
+.lang-btn-neon.russian {
+  background: linear-gradient(135deg, #5555ff 0%, #aa00ff 100%);
+}
+
+.lang-btn-neon.japanese {
+  background: linear-gradient(135deg, #ff5555 0%, #ffaa00 100%);
+}
+
+.lang-note {
+  margin-top: 25px;
+  opacity: 0.8;
+  font-size: 14px;
+  color: #a8ffea;
+  line-height: 1.6;
+  padding: 10px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  border: 1px solid rgba(0,245,255,0.2);
+}
+
+/* ———————————————————————————————
+   انیمیشن‌های دکمه‌ها
+——————————————————————————————— */
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes guessPulse {
+  0% { box-shadow: 0 8px 22px rgba(0,255,180,.25); }
+  50% { box-shadow: 0 8px 30px rgba(0,255,180,.5); }
+  100% { box-shadow: 0 8px 22px rgba(0,255,180,.25); }
+}
+
+@keyframes buyShake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes settingsSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes restartFlip {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+@keyframes menuSlide {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes bonusGlow {
+  0% { box-shadow: 0 0 5px #ff5555; }
+  50% { box-shadow: 0 0 20px #ff5555; }
+  100% { box-shadow: 0 0 5px #ff5555; }
+}
+
+@keyframes successBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes btnPulseUniversal {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes btnColorShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.heart-beat-animation {
+  animation: heartBeat 0.5s ease;
+}
+
+.guess-pulse-animation {
+  animation: guessPulse 0.5s ease;
+}
+
+.buy-shake-animation {
+  animation: buyShake 0.3s ease;
+}
+
+.settings-spin-animation {
+  animation: settingsSpin 0.5s ease;
+}
+
+.restart-flip-animation {
+  animation: restartFlip 0.8s ease;
+}
+
+.menu-slide-animation {
+  animation: menuSlide 0.3s ease;
+}
+
+.bonus-glow-animation {
+  animation: bonusGlow 1s ease;
+}
+
+.success-bounce-animation {
+  animation: successBounce 0.5s ease;
+}
+
+.btn-animate {
+  animation: btnPulseUniversal 0.3s ease;
+}
+
+/* ———————————————————————————————
+   پایه و پس‌زمینه‌های مختلف
+——————————————————————————————— */
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  margin:0;color:var(--text);
+  font-family:Vazirmatn, IRANSans, 'Segoe UI', Roboto, 'Noto Sans Arabic', 'Noto Sans', 'Noto Sans JP', sans-serif;
+  overflow-y:auto; overflow-x:hidden;
+  background-color: var(--bg);
+  transition: background-color 800ms ease, background-image 800ms ease;
+}
+
+/* حالت‌های مختلف پس‌زمینه (از تنظیمات) */
+body.bg-neon-dark{
+  background-color:#020617;
+  background-image:radial-gradient(circle at top,#020617,#000000);
+}
+body.bg-neon-white{
+  background-color:#f9fafb;
+  background-image:radial-gradient(circle at top,#e5f2ff,#ffffff);
+  color:#020617;
+}
+body.bg-galaxy{
+  background-color:#020014;
+  background-image:
+    radial-gradient(circle at 10% 20%,rgba(56,189,248,.35),transparent 55%),
+    radial-gradient(circle at 80% 10%,rgba(244,114,182,.35),transparent 55%),
+    radial-gradient(circle at 50% 80%,rgba(52,211,153,.35),transparent 55%),
+    radial-gradient(circle at 0% 100%,rgba(59,130,246,.25),transparent 55%);
+}
+body.bg-3d{
+  background-color:#020617;
+  background-image:
+    linear-gradient(135deg,rgba(15,23,42,1) 0%,rgba(15,23,42,.4) 40%,rgba(15,23,42,1) 100%),
+    radial-gradient(circle at 0% 0%,rgba(56,189,248,.25),transparent 55%),
+    radial-gradient(circle at 100% 100%,rgba(34,197,94,.25),transparent 55%);
+}
+
+/* ———————————————————————————————
+   هدر
+——————————————————————————————— */
+.header{
+  position:sticky;top:0;left:0;right:0;z-index:6;text-align:center;
+  padding:12px 0; backdrop-filter:blur(8px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.logo{
+  display:inline-block;padding:8px 18px;border-radius:14px;
+  font-weight:900;letter-spacing:.8px;font-size:28px;
+  background:linear-gradient(90deg,#00f5ff,#00ff88,#ff5555);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 18px rgba(0,245,255,.55), 0 0 28px rgba(255,85,85,.35);
+  filter:drop-shadow(0 6px 16px rgba(0,0,0,.4));
+  user-select:none
+}
+
+.language-switcher {
+  position: relative;
+}
+
+.lang-current {
+  padding: 8px 16px;
+  background: rgba(0,245,255,0.1);
+  border: 1px solid var(--borderA);
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.lang-current:hover {
+  background: rgba(0,245,255,0.2);
+}
+
+.lang-flag {
+  font-size: 20px;
+}
+
+/* ———————————————————————————————
+   بوم پس‌زمینه متحرک
+——————————————————————————————— */
+#bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+}
+
+/* ———————————————————————————————
+   کانتینر
+——————————————————————————————— */
+.wrap{
+  position:relative;z-index:2;
+  display:flex;gap:20px;align-items:flex-start;justify-content:center;
+  padding:10px 20px 40px;
+  width:100%;
+}
+
+/* ———————————————————————————————
+   پنل‌ها
+——————————————————————————————— */
+.panel{
+  flex:2;min-width:320px;max-width:880px;
+  background:linear-gradient(180deg,rgba(10,12,20,.68),rgba(10,12,20,.46));
+  border:1px solid var(--borderA);
+  border-radius:18px;padding:18px;
+  box-shadow:var(--shadow);backdrop-filter:blur(6px)
+}
+.sidebar{
+  flex:1;min-width:280px;max-width:400px;
+  background:linear-gradient(180deg,rgba(12,14,22,.68),rgba(12,14,22,.46));
+  border:1px solid var(--borderB);
+  border-radius:18px;padding:14px;
+  box-shadow:var(--shadow);backdrop-filter:blur(6px)
+}
+
+/* ———————————————————————————————
+   نوار بالا و قلب‌ها (با انیمیشن)
+——————————————————————————————— */
+.topbar{
+  display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:12px
+}
+.hearts{
+  display:flex;gap:7px;flex-wrap:wrap;align-items:center;
+  max-width:100%;
+}
+@keyframes heartPop{
+  0%{transform:scale(.4);opacity:0;}
+  60%{transform:scale(1.3);opacity:1;}
+  100%{transform:scale(1);opacity:1;}
+}
+.heart{
+  font-size:22px;
+  filter:drop-shadow(0 3px 6px rgba(255,85,85,.4));
+  transition:transform .16s ease, opacity .16s ease;
+  animation:heartPop .25s ease;
+}
+.infoText{opacity:.85;font-size:12px}
+
+/* ———————————————————————————————
+   نوار XP
+——————————————————————————————— */
+.xp-bar-container {
+  margin: 10px 0 15px 0;
+  background: rgba(20,22,30,0.7);
+  border-radius: 12px;
+  padding: 8px;
+  border: 1px solid var(--borderA);
+}
+
+.xp-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.xp-bar {
+  height: 12px;
+  background: rgba(0,245,255,0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00f5ff, #00ff88);
+  border-radius: 10px;
+  transition: width 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.xp-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    rgba(255,255,255,0) 0%, 
+    rgba(255,255,255,0.3) 50%, 
+    rgba(255,255,255,0) 100%);
+  animation: xpShine 2s infinite;
+}
+
+@keyframes xpShine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.xp-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 10px;
+  color: #a8ffea;
+  opacity: 0.8;
+}
+
+/* ———————————————————————————————
+   دکمه‌های نئونی
+——————————————————————————————— */
+.btn{
+  position:relative;border:none;border-radius:14px;cursor:pointer;
+  padding:10px 14px;font-weight:800;
+  color:#001316;letter-spacing:.5px;
+  background:linear-gradient(90deg,#00f5ff 0%,#00ff88 50%,#ff5555 100%);
+  box-shadow:0 8px 22px rgba(0,255,180,.25);
+  transition:transform .12s ease, filter .12s ease, box-shadow .12s ease;
+  user-select:none;
+  background-size: 200% 200%;
+  animation: btnColorShift 3s infinite;
+}
+.btn::before{
+  content:"";position:absolute;inset:-2px;border-radius:16px;
+  background:conic-gradient(from 180deg,#00f5ff,#00ff88,#ff5555,#00f5ff);
+  filter:blur(10px);opacity:.35;z-index:-1
+}
+.btn:hover{transform:translateY(-2px);filter:saturate(1.15)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.55;cursor:not-allowed;filter:grayscale(.3); animation: none;}
+
+.btn-buy{
+  padding:8px 12px;border-radius:12px;font-size:12px;
+  background:linear-gradient(90deg,#ff7f50,#ffdd55);
+  box-shadow:0 6px 18px rgba(255,140,0,.35);
+  color:#2b1700;letter-spacing:.2px
+}
+.btn-guess{
+  height:60px;font-size:22px;border-radius:14px;margin-top:10px;
+  background:linear-gradient(90deg,#00f5ff,#00ff88);
+  color:#001316
+}
+.btn-settings{font-size:12px;margin-top:10px}
+.btn-restart{
+  background:linear-gradient(90deg,#ff6bd6,#ffdd55);
+  color:#251000;border-radius:12px;padding:10px 14px
+}
+
+/* ———————————————————————————————
+   ورودی و شمارنده
+——————————————————————————————— */
+.inputRow{margin-top:12px;display:grid;grid-template-columns:1fr;gap:10px}
+.inputRow input[type="number"]{
+  height:54px;border-radius:12px;border:1px solid var(--borderA);
+  background:rgba(16,18,26,.7);color:var(--text);
+  padding:0 14px;font-size:18px;outline:none;
+  box-shadow:inset 0 0 18px rgba(0,255,136,.08)
+}
+.guessBadge{
+  display:inline-block;margin-right:8px;padding:4px 10px;border-radius:999px;
+  background:rgba(0,245,255,.14);color:var(--accent);font-size:12px
+}
+
+/* ———————————————————————————————
+   وضعیت پیام‌ها
+——————————————————————————————— */
+.status{
+  margin-top:10px;padding:12px;border-radius:12px;min-height:48px;
+  background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.18);
+  line-height:1.7
+}
+.status.good{background:rgba(50,255,126,.12);border-color:rgba(50,255,126,.35);color:var(--good)}
+.status.bad{background:rgba(255,59,59,.12);border-color:rgba(255,59,59,.35);color:var(--danger)}
+.status.warn{background:rgba(255,221,85,.14);border-color:rgba(255,221,85,.35);color:#d29b00}
+
+/* ———————————————————————————————
+   تنظیمات
+——————————————————————————————— */
+.settingsCard{
+  display:none;margin-top:10px;padding:12px;border-radius:14px;
+  background:rgba(18,20,28,.7);border:1px solid var(--borderB)
+}
+.settingsCard h4{margin:0 0 8px 0;font-size:16px;color:#a8ffea}
+.settingsCard p{margin:4px 0;color:#cfeef6}
+.settingsRow{display:flex;gap:8px;margin-top:8px}
+.settingsRow input{
+  flex:1;height:42px;border-radius:10px;border:1px solid var(--borderA);
+  background:rgba(12,14,22,.6);color:var(--text);padding:0 12px
+}
+.settingsRow button{padding:10px 14px;border-radius:10px}
+
+/* ———————————————————————————————
+   امتیاز و شروع دوباره
+——————————————————————————————— */
+.final{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px
+}
+.scoreBox{
+  padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.18);min-height:44px
+}
+
+/* ———————————————————————————————
+   سایدبار
+——————————————————————————————— */
+.sidebar h3{
+  margin:0 0 10px 0;font-size:16px;font-weight:800;color:#a8ffea;letter-spacing:.4px
+}
+.guessList{
+  list-style:none;margin:0;padding:0;max-height:48vh;overflow:auto;
+  border:1px solid var(--borderA);border-radius:12px;background:rgba(255,255,255,.04)
+}
+.guessList li{
+  padding:8px 10px;border-bottom:1px dashed rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:space-between
+}
+.guessList li:last-child{border-bottom:none}
+.guessMeta{display:flex;gap:8px;align-items:center}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px}
+.badge-high{background:rgba(255,99,132,.2);color:#ff6384}
+.badge-low{background:rgba(54,162,235,.2);color:#36a2eb}
+.badge-ok{background:rgba(75,192,192,.2);color:#4bc0c0}
+.badge-warn{background:rgba(255,221,85,.22);color:#d29b00}
+.badge-red-card{background:rgba(255,59,59,.3);color:#ff3b3b}
+
+.countBox{
+  margin-top:10px;padding:8px 10px;border-radius:12px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18)
+}
+
+.menu{margin-top:14px;display:grid;gap:10px}
+.menuGroupTitle{opacity:.85;font-size:12px;margin-top:6px}
+.menuBtn{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;border-radius:12px;cursor:pointer;
+  color:#cfeef6;background:linear-gradient(180deg,rgba(14,16,24,.8),rgba(14,16,24,.6));
+  border:1px solid var(--borderB);
+  box-shadow:0 6px 16px rgba(0,0,0,.35);transition:.12s ease
+}
+.menuBtn:hover{transform:translateY(-2px)}
+.menuIcon{
+  width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:12px solid #00ff88;
+  filter:drop-shadow(0 0 6px rgba(0,255,136,.6))
+}
+.menuText{font-weight:800;letter-spacing:.4px}
+
+/* ———————————————————————————————
+   اسکرول‌بار سفارشی
+——————————————————————————————— */
+.sidebar .guessList::-webkit-scrollbar{width:10px}
+.sidebar .guessList::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,#00f5ff,#00ff88,#ff5555);border-radius:10px
+}
+
+/* ———————————————————————————————
+   ریسپانسیو
+——————————————————————————————— */
+@media(max-width:960px){
+  .wrap{flex-direction:column;align-items:stretch}
+}
+
+/* ———————————————————————————————
+   انیمیشن‌های جدید برای بهبود تجربه کاربری
+——————————————————————————————— */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 5px rgba(0,245,255,0.5); }
+  50% { box-shadow: 0 0 20px rgba(0,245,255,0.8); }
+  100% { box-shadow: 0 0 5px rgba(0,245,255,0.5); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes rotate3D {
+  0% { transform: rotateY(0deg) rotateX(0deg); }
+  50% { transform: rotateY(10deg) rotateX(5deg); }
+  100% { transform: rotateY(0deg) rotateX(0deg); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.glow-animation {
+  animation: glowPulse 2s infinite;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.rotate-3d {
+  animation: rotate3D 5s ease-in-out infinite;
+}
+
+/* ———————————————————————————————
+   استایل برای صفحه‌نمایش عمودی و افقی
+——————————————————————————————— */
+@media (orientation: portrait) {
+  .lang-modal .lang-container {
+    max-width: 90%;
+    padding: 30px 20px;
+  }
+  
+  .lang-title {
+    font-size: 24px;
+  }
+  
+  .lang-btn-neon {
+    padding: 18px 12px;
+    font-size: 18px;
+  }
+  
+  .lang-btn-neon .flag {
+    font-size: 28px;
+  }
+  
+  .wrap {
+    padding: 10px 15px 30px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .lang-modal .lang-container {
+    max-width: 80%;
+    padding: 20px 15px;
+  }
+  
+  .lang-title {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  .lang-buttons {
+    margin: 20px 0;
+  }
+  
+  .lang-btn-neon {
+    padding: 15px 10px;
+    font-size: 16px;
+  }
+}
+
+@media (max-height: 700px) {
+  .panel {
+    padding: 15px;
+  }
+  
+  .sidebar {
+    padding: 12px;
+  }
+}
+
+/* ———————————————————————————————
+   استایل‌های پروفایل کاربر
+——————————————————————————————— */
+.profile-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(10,12,20,.4);
+  border-radius: 14px;
+  border: 1px solid var(--borderB);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.avatar-large {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00f5ff, #00ff88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #001316;
+  font-weight: 900;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 15px rgba(0,245,255,0.4);
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #a8ffea;
+  margin-bottom: 4px;
+}
+
+.profile-level {
+  font-size: 12px;
+  opacity: 0.8;
+  color: #00ff88;
+}
+
+.avatars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.avatar-option {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gradient));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.avatar-option:hover {
+  transform: scale(1.1);
+  border-color: var(--accent);
+}
+
+.avatar-option.selected {
+  border-color: #00ff88;
+  box-shadow: 0 0 15px rgba(0,255,136,0.5);
+}
+
+.name-input-container {
+  margin-top: 15px;
+}
+
+.name-input {
+  width: 100%;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--borderA);
+  background: rgba(12,14,22,.6);
+  color: var(--text);
+  padding: 0 12px;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.save-profile-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #00f5ff, #00ff88);
+  color: #001316;
+  border: none;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-profile-btn:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.2);
+}
+
+/* ———————————————————————————————
+   دکمه هوش مصنوعی DARK_GPT
+——————————————————————————————— */
+.ai-assistant-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2px solid #00f5ff;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4),
+              0 0 20px rgba(0, 245, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  animation: aiPulse 3s infinite;
+}
+
+@keyframes aiPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4),
+                0 0 20px rgba(0, 245, 255, 0.6);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.6),
+                0 0 30px rgba(0, 245, 255, 0.8);
+  }
+}
+
+.ai-assistant-btn:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6),
+              0 0 30px rgba(0, 245, 255, 0.8);
+}
+
+.ai-assistant-btn.active {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  transform: scale(1.1);
+}
+
+.ai-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff4757;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* ———————————————————————————————
+   پنل چت هوش مصنوعی
+——————————————————————————————— */
+.ai-chat-panel {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  width: 350px;
+  max-height: 500px;
+  background: linear-gradient(180deg, rgba(15, 17, 27, 0.98), rgba(10, 12, 20, 0.95));
+  border: 2px solid #667eea;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
+              0 0 40px rgba(102, 126, 234, 0.4);
+  z-index: 99;
+  display: none;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.ai-chat-panel.active {
+  display: flex;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-header {
+  padding: 15px 20px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.ai-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border: 2px solid #00f5ff;
+}
+
+.ai-title {
+  flex: 1;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.ai-subtitle {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.ai-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  transition: transform 0.2s;
+}
+
+.ai-close-btn:hover {
+  transform: rotate(90deg);
+}
+
+.ai-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  max-height: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-message {
+  padding: 12px 15px;
+  border-radius: 15px;
+  max-width: 85%;
+  animation: messageAppear 0.3s ease;
+  line-height: 1.5;
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-message.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-bottom-right-radius: 5px;
+}
+
+.ai-message.bot {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  border-bottom-left-radius: 5px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.ai-typing {
+  padding: 8px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  display: flex;
+  gap: 5px;
+  align-self: flex-start;
+}
+
+.ai-typing span {
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+
+.ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+.ai-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-8px); }
+}
+
+.ai-input-area {
+  padding: 15px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  gap: 10px;
+  background: rgba(10, 12, 20, 0.8);
+}
+
+.ai-input {
+  flex: 1;
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(102, 126, 234, 0.5);
+  background: rgba(20, 22, 30, 0.7);
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.ai-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+}
+
+.ai-send-btn {
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ai-send-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.ai-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.ai-quick-questions {
+  padding: 10px 15px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  background: rgba(15, 17, 27, 0.9);
+}
+
+.ai-quick-title {
+  font-size: 11px;
+  color: #a8ffea;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ai-quick-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ai-quick-btn {
+  padding: 6px 12px;
+  background: rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(102, 126, 234, 0.4);
+  color: #a8ffea;
+  border-radius: 8px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ai-quick-btn:hover {
+  background: rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ———————————————————————————————
+   ریسپانسیو برای پنل چت
+——————————————————————————————— */
+@media (max-width: 768px) {
+  .ai-chat-panel {
+    width: 90vw;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 100px;
+  }
+  
+  .ai-assistant-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    bottom: 15px;
+    left: 15px;
+  }
+  
+  .ai-messages {
+    max-height: 300px;
+  }
+}
+
+/* ———————————————————————————————
+   بهینه‌سازی‌های عملکرد
+——————————————————————————————— */
+.performance-optimized {
+  /* کاهش مصرف GPU */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  will-change: transform;
+}
+
+/* ———————————————————————————————
+   حذف انیمیشن‌های سنگین در حالت موبایل
+——————————————————————————————— */
+@media (max-width: 768px) {
+  .rotate-3d {
+    animation: none;
+  }
+  
+  .float-animation {
+    animation-duration: 4s;
+  }
+  
+  .btn::before {
+    display: none;
+  }
+}
+
+/* ———————————————————————————————
+   حالت کاهش حرکت برای کاربرانی که ترجیح می‌دهند
+——————————————————————————————— */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body class="bg-neon-dark" dir="rtl">
+<!-- مودال انتخاب زبان با دکمه‌های نئونی -->
+<div class="lang-modal" id="langModal">
+  <div class="lang-container">
+    <div class="lang-title float-animation">Choose Language / اختر اللغة / Выберите язык / 言語を選択 / انتخاب زبان</div>
+    <div class="lang-buttons">
+      <button class="lang-btn-neon english" id="langEnglish">
+        <span class="flag">🇺🇸</span>
+        <span class="lang-name">English</span>
+      </button>
+      <button class="lang-btn-neon persian" id="langPersian">
+        <span class="flag">🇮🇷</span>
+        <span class="lang-name">فارسی (Persian)</span>
+      </button>
+      <button class="lang-btn-neon arabic" id="langArabic">
+        <span class="flag">🇸🇦</span>
+        <span class="lang-name">العربية (Arabic)</span>
+      </button>
+      <button class="lang-btn-neon russian" id="langRussian">
+        <span class="flag">🇷🇺</span>
+        <span class="lang-name">Русский (Russian)</span>
+      </button>
+      <button class="lang-btn-neon japanese" id="langJapanese">
+        <span class="flag">🇯🇵</span>
+        <span class="lang-name">日本語 (Japanese)</span>
+      </button>
+    </div>
+    <div class="lang-note">You can change language later from settings / يمكنك تغيير اللغة لاحقًا من الإعدادات / Вы можете изменить язык позже в настройках / 設定から後で言語を変更できます / میتوانید بعداً از تنظیمات زبان را تغییر دهید</div>
+  </div>
+</div>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<!-- دکمه هوش مصنوعی -->
+<div class="ai-assistant-btn" id="aiAssistantBtn">
+  <span>🤖</span>
+  <div class="ai-badge" id="aiBadge" style="display:none;">!</div>
+</div>
+
+<!-- پنل چت هوش مصنوعی -->
+<div class="ai-chat-panel" id="aiChatPanel">
+  <div class="ai-header">
+    <div class="ai-avatar">AI</div>
+    <div>
+      <div class="ai-title">DARK_GPT</div>
+      <div class="ai-subtitle">هوش مصنوعی کامل - پاسخ به هر سوالی</div>
+    </div>
+    <button class="ai-close-btn" id="aiCloseBtn">×</button>
+  </div>
+  
+  <div class="ai-messages" id="aiMessages">
+    <div class="ai-message bot">
+      سلام! من **DARK_GPT** هستم، یک هوش مصنوعی پیشرفته که می‌توانم به **هر سوالی** پاسخ دهم! 🧠✨
+      <br><br>از من می‌توانید بپرسید درباره:
+      <br>🎮 **بازی:** قوانین، استراتژی‌ها، عدد مخفی
+      <br>📚 **دانش:** ریاضی، علوم، تاریخ، جغرافیا
+      <br>💻 **تکنولوژی:** برنامه‌نویسی، هوش مصنوعی، وب
+      <br>🧠 **عمومی:** فلسفه، روانشناسی، داستان‌نویسی
+      <br>🎨 **خلاقانه:** شعر، داستان، ایده‌های نو
+      <br><br>بپرسید! من اینجام تا کمک کنم! 🚀
+    </div>
+  </div>
+  
+  <div class="ai-quick-questions">
+    <div class="ai-quick-title">سوالات سریع:</div>
+    <div class="ai-quick-buttons">
+      <button class="ai-quick-btn" data-question="عدد مخفی بازی چیست؟">🔢 عدد مخفی</button>
+      <button class="ai-quick-btn" data-question="یک داستان کوتاه بگو">📖 داستان کوتاه</button>
+      <button class="ai-quick-btn" data-question="کدنویسی را چگونه شروع کنم؟">💻 برنامه‌نویسی</button>
+      <button class="ai-quick-btn" data-question="یک شعر بگو">🎭 شعر</button>
+    </div>
+  </div>
+  
+  <div class="ai-input-area">
+    <input type="text" class="ai-input" id="aiInput" placeholder="هر سوالی داری بپرس..." />
+    <button class="ai-send-btn" id="aiSendBtn">ارسال ✨</button>
+  </div>
+</div>
+
+<div class="header">
+  <div class="logo">PRIVATE APK</div>
+  <div class="language-switcher" style="display:none;" id="langSwitcher">
+    <div class="lang-current" id="currentLang">
+      <span class="lang-flag">🇮🇷</span>
+      <span id="langText">فارسی</span>
+    </div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="panel" aria-label="پنل بازی حدس عدد">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="hearts" id="hearts" aria-label="قلب‌ها"></div>
+        <span class="infoText" id="heartsLabel">❤️ فرصت‌هایت</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-buy" id="buyBtn" aria-label="خرید قلب">🛒 <span id="buyBtnText">خرید قلب</span></button>
+        <span class="infoText" id="buyLimitText">حداکثر ۲ بار (حتی وقتی قلب‌ها کامل‌اند)</span>
+      </div>
+    </div>
+
+    <!-- نوار XP جدید -->
+    <div class="xp-bar-container">
+      <div class="xp-label">
+        <span>سطح کاربر</span>
+        <span id="xpCurrent">0</span> / <span id="xpNeeded">100</span> XP
+      </div>
+      <div class="xp-bar">
+        <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+      </div>
+      <div class="xp-details">
+        <span id="xpLevel">سطح: مبتدی</span>
+        <span id="xpProgress">0%</span>
+      </div>
+    </div>
+
+    <div class="inputRow">
+      <input type="number" id="guessInput" placeholder="عدد بین ۱ تا ۲۵۰۰" inputmode="numeric" aria-label="ورودی حدس عدد" />
+      <button class="btn btn-guess" id="guessBtn" aria-label="ارسال حدس">
+        🎯 <span id="guessBtnText">حدس بزن</span>
+        <span class="guessBadge"><span id="guessBadgeText">حدس‌ها:</span> <span id="guessCount">0</span></span>
+      </button>
+    </div>
+
+    <div id="status" class="status" aria-live="polite" data-i18n="initialMessage">برای شروع، یک عدد حدس بزن.</div>
+
+    <button class="btn btn-settings" id="settingsBtn" aria-expanded="false">⚙️ <span id="settingsBtnText">تنظیمات</span></button>
+    <div class="settingsCard" id="settingsCard" aria-hidden="true">
+      <h4 id="aboutGameTitle">درباره بازی</h4>
+      <p id="aboutGameText1">بازی ساخته شده توسط پارسا مجرد</p>
+      <p id="aboutGameText2">ایده پردازی توسط همکلاسی عزیزم حسین گلزاری</p>
+
+      <h4 style="margin-top:10px;" id="bonusCodeTitle">کد جایزه</h4>
+      <div class="settingsRow">
+        <input type="text" id="bonusCode" placeholder="کد جایزه را وارد کن..." aria-label="ورودی کد جایزه" data-i18n-ph="bonusCodePlaceholder" />
+        <button class="btn" id="bonusBtn" data-i18n="bonusBtn">بررسی کد</button>
+      </div>
+      <p style="margin-top:6px;color:#9bd1ff" id="bonusHint">کد «parsa» صفحه را قرمز می‌کند، «reset» به حالت عادی برمی‌گرداند.</p>
+
+      <h4 style="margin-top:10px;" id="rangeTitle">حداقل و حداکثر عدد مجاز</h4>
+      <div class="settingsRow">
+        <input type="number" id="minInput" placeholder="حداقل (پیش‌فرض 1)" data-i18n-ph="minPlaceholder" />
+        <input type="number" id="maxInput" placeholder="حداکثر (پیش‌فرض 2500)" data-i18n-ph="maxPlaceholder" />
+        <button class="btn" id="rangeBtn" data-i18n="rangeBtn">ثبت بازه</button>
+      </div>
+
+      <h4 style="margin-top:10px;" id="scoreTitle">امتیاز جاری</h4>
+      <div class="settingsRow">
+        <input type="text" id="scoreView" readonly value="0" />
+        <button class="btn" id="resetScoreBtn" data-i18n="resetScoreBtn">ریست امتیاز</button>
+      </div>
+      
+      <h4 style="margin-top:10px;" id="languageTitle">زبان</h4>
+      <div class="settingsRow">
+        <select id="languageSelect" style="flex:1;height:42px;border-radius:10px;border:1px solid var(--borderA);background:rgba(12,14,22,.6);color:var(--text);padding:0 12px">
+          <option value="fa">فارسی (Persian)</option>
+          <option value="en">English</option>
+          <option value="ar">العربية (Arabic)</option>
+          <option value="ru">Русский (Russian)</option>
+          <option value="ja">日本語 (Japanese)</option>
+        </select>
+        <button class="btn" id="applyLanguageBtn" data-i18n="applyLanguageBtn">اعمال زبان</button>
+      </div>
+    </div>
+
+    <div class="final">
+      <div class="scoreBox" id="finalScore" data-i18n="finalScoreDefault">امتیاز نهایی پس از پایان بازی نمایش داده می‌شود.</div>
+      <button class="btn btn-restart" id="restartBtn" style="display:none;">🔁 <span id="restartBtnText">شروع دوباره</span></button>
+    </div>
+
+    <div style="height:140px"></div>
+  </div>
+
+  <div class="sidebar" aria-label="سایدبار لیست حدس‌ها">
+    <!-- بخش پروفایل کاربر -->
+    <div class="profile-section">
+      <div class="profile-header">
+        <div class="avatar-large" id="currentAvatar">👤</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">بازیکن ناشناس</div>
+          <div class="profile-level" id="profileLevel">سطح: مبتدی</div>
+        </div>
+      </div>
+      
+      <div class="avatars-grid" id="avatarsGrid">
+        <!-- آواتارها توسط JavaScript اضافه می‌شوند -->
+      </div>
+      
+      <div class="name-input-container">
+        <input type="text" class="name-input" id="profileNameInput" placeholder="نام خود را وارد کنید..." maxlength="20" />
+        <button class="save-profile-btn" id="saveProfileBtn">💾 ذخیره پروفایل</button>
+      </div>
+    </div>
+
+    <h3 id="guessListTitle">لیست حدس‌ها</h3>
+    <ul class="guessList" id="guessList" aria-live="polite"></ul>
+    <div class="countBox"><span id="guessCountLabel">تعداد حدس‌ها:</span> <strong id="sideGuessCount">0</strong></div>
+
+    <div class="menu">
+      <div class="menuGroupTitle" id="lineColorTitle">رنگ خطوط متحرک (شبکه):</div>
+      <div class="menuBtn" id="lineBlueBtn"><span class="menuIcon"></span><span class="menuText">آبی</span></div>
+      <div class="menuBtn" id="lineGreenBtn"><span class="menuIcon"></span><span class="menuText">سبز</span></div>
+      <div class="menuBtn" id="lineYellowBtn"><span class="menuIcon"></span><span class="menuText">زرد</span></div>
+      <div class="menuBtn" id="lineRedBtn"><span class="menuIcon" style="border-right-color:#ff5555"></span><span class="menuText">قرمز</span></div>
+
+      <div class="menuGroupTitle" id="bgStyleTitle">نوع پس‌زمینه:</div>
+      <div class="menuBtn" id="bgStyleNeonDark"><span class="menuIcon"></span><span class="menuText">نئونی تیره + نودها</span></div>
+      <div class="menuBtn" id="bgStyleNeonWhite"><span class="menuIcon"></span><span class="menuText">نئونی سفید + نودها</span></div>
+      <div class="menuBtn" id="bgStyleGalaxy"><span class="menuIcon"></span><span class="menuText">کهکشانی</span></div>
+      <div class="menuBtn" id="bgStyle3D"><span class="menuIcon"></span><span class="menuText">سه‌بعدی</span></div>
+
+      <div class="menuGroupTitle" id="toolsTitle">ابزارها:</div>
+      <div class="menuBtn" id="cycleLinesBtn"><span class="menuIcon"></span><span class="menuText">🎨 چرخه نرم رنگ خطوط</span></div>
+      <div class="menuBtn" id="hintBtn"><span class="menuIcon"></span><span class="menuText">💡 راهنمایی</span></div>
+      <div class="menuBtn" id="clearListBtn"><span class="menuIcon"></span><span class="menuText">🧹 پاک کردن لیست حدس‌ها</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== سیستم ترجمه ====================
+let currentLanguage = 'fa';
+const translations = {
+  fa: {
+    heartsLabel: "❤️ فرصت‌هایت",
+    buyBtnText: "خرید قلب",
+    buyLimitText: "حداکثر ۲ بار (حتی وقتی قلب‌ها کامل‌اند)",
+    guessBtnText: "حدس بزن",
+    guessBadgeText: "حدس‌ها:",
+    initialMessage: "برای شروع، یک عدد حدس بزن.",
+    settingsBtnText: "تنظیمات",
+    aboutGameTitle: "درباره بازی",
+    aboutGameText1: "بازی ساخته شده توسط پارسا مجرد",
+    aboutGameText2: "ایده پردازی توسط همکلاسی عزیزم حسین گلزاری",
+    bonusCodeTitle: "کد جایزه",
+    bonusCodePlaceholder: "کد جایزه را وارد کن...",
+    bonusBtn: "بررسی کد",
+    bonusHint: "کد «parsa» صفحه را قرمز می‌کند، «reset» به حالت عادی برمی‌گرداند.",
+    rangeTitle: "حداقل و حداکثر عدد مجاز",
+    minPlaceholder: "حداقل (پیش‌فرض 1)",
+    maxPlaceholder: "حداکثر (پیش‌فرض 2500)",
+    rangeBtn: "ثبت بازه",
+    scoreTitle: "امتیاز جاری",
+    resetScoreBtn: "ریست امتیاز",
+    languageTitle: "زبان",
+    applyLanguageBtn: "اعمال زبان",
+    finalScoreDefault: "امتیاز نهایی پس از پایان بازی نمایش داده می‌شود.",
+    restartBtnText: "شروع دوباره",
+    guessListTitle: "لیست حدس‌ها",
+    guessCountLabel: "تعداد حدس‌ها:",
+    lineColorTitle: "رنگ خطوط متحرک (شبکه):",
+    bgStyleTitle: "نوع پس‌زمینه:",
+    toolsTitle: "ابزارها:",
+    lineBlueBtn: "آبی",
+    lineGreenBtn: "سبز",
+    lineYellowBtn: "زرد",
+    lineRedBtn: "قرمز",
+    bgStyleNeonDark: "نئونی تیره + نودها",
+    bgStyleNeonWhite: "نئونی سفید + نودها",
+    bgStyleGalaxy: "کهکشانی",
+    bgStyle3D: "سه‌بعدی",
+    cycleLinesBtn: "🎨 چرخه نرم رنگ خطوط",
+    hintBtn: "💡 راهنمایی",
+    clearListBtn: "🧹 پاک کردن لیست حدس‌ها",
+    stillCanBuy: "هنوز می‌توانی خرید کنی!",
+    buyHeartsLeft: "هنوز {{count}} قلب می‌توانی خریداری کنی",
+    improvedMessage: "آفرین! پیشرفت کردی! امتیازت از {{old}} به {{new}} رسید",
+    secretNumberReveal: "عدد مخفی {{target}} بود! دفعه بعد موفق می‌شوی! 💪"
+  },
+  en: {
+    heartsLabel: "❤️ Your Hearts",
+    buyBtnText: "Buy Heart",
+    buyLimitText: "Maximum 2 times (even when hearts are full)",
+    guessBtnText: "Guess",
+    guessBadgeText: "Guesses:",
+    initialMessage: "To start, guess a number.",
+    settingsBtnText: "Settings",
+    aboutGameTitle: "About Game",
+    aboutGameText1: "Game created by Parsa Mojarrad",
+    aboutGameText2: "Ideation by my dear classmate Hossein Golzari",
+    bonusCodeTitle: "Bonus Code",
+    bonusCodePlaceholder: "Enter bonus code...",
+    bonusBtn: "Check Code",
+    bonusHint: "Code 'parsa' turns page red, 'reset' returns to normal.",
+    rangeTitle: "Minimum and Maximum Allowed Number",
+    minPlaceholder: "Minimum (default 1)",
+    maxPlaceholder: "Maximum (default 2500)",
+    rangeBtn: "Set Range",
+    scoreTitle: "Current Score",
+    resetScoreBtn: "Reset Score",
+    languageTitle: "Language",
+    applyLanguageBtn: "Apply Language",
+    finalScoreDefault: "Final score will be displayed after game ends.",
+    restartBtnText: "Restart",
+    guessListTitle: "Guess List",
+    guessCountLabel: "Number of guesses:",
+    lineColorTitle: "Moving Lines Color (Grid):",
+    bgStyleTitle: "Background Type:",
+    toolsTitle: "Tools:",
+    lineBlueBtn: "Blue",
+    lineGreenBtn: "Green",
+    lineYellowBtn: "Yellow",
+    lineRedBtn: "Red",
+    bgStyleNeonDark: "Neon Dark + Nodes",
+    bgStyleNeonWhite: "Neon White + Nodes",
+    bgStyleGalaxy: "Galaxy",
+    bgStyle3D: "3D",
+    cycleLinesBtn: "🎨 Smooth Line Color Cycle",
+    hintBtn: "💡 Hint",
+    clearListBtn: "🧹 Clear Guess List",
+    stillCanBuy: "You can still buy!",
+    buyHeartsLeft: "You can still buy {{count}} heart(s)",
+    improvedMessage: "Congratulations! You improved! Your score went from {{old}} to {{new}}",
+    secretNumberReveal: "The secret number was {{target}}! You'll get it next time! 💪"
+  }
+};
+
+function updatePageLanguage(lang) {
+  currentLanguage = lang;
+  document.documentElement.lang = lang;
+  
+  // تنظیم جهت متن بر اساس زبان
+  if (lang === 'fa' || lang === 'ar') {
+    document.documentElement.dir = 'rtl';
+    document.body.dir = 'rtl';
+  } else {
+    document.documentElement.dir = 'ltr';
+    document.body.dir = 'ltr';
+  }
+  
+  // تغییر فونت برای زبان‌های مختلف
+  if (lang === 'ar') {
+    document.body.style.fontFamily = "'Noto Sans Arabic', 'Segoe UI', sans-serif";
+  } else if (lang === 'ru') {
+    document.body.style.fontFamily = "'Segoe UI', Roboto, sans-serif";
+  } else if (lang === 'fa') {
+    document.body.style.fontFamily = "Vazirmatn, IRANSans, 'Segoe UI', sans-serif";
+  } else if (lang === 'ja') {
+    document.body.style.fontFamily = "'Noto Sans JP', 'Segoe UI', sans-serif";
+  } else {
+    document.body.style.fontFamily = "'Segoe UI', Roboto, sans-serif";
+  }
+  
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang] && translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
+  });
+  
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if (translations[lang] && translations[lang][key]) {
+      el.placeholder = translations[lang][key];
+    }
+  });
+  
+  const t = translations[lang];
+  
+  // هدر
+  document.getElementById('heartsLabel').textContent = t.heartsLabel;
+  document.getElementById('buyBtnText').textContent = t.buyBtnText;
+  document.getElementById('buyLimitText').textContent = t.buyLimitText;
+  document.getElementById('guessBtnText').textContent = t.guessBtnText;
+  document.getElementById('guessBadgeText').textContent = t.guessBadgeText;
+  document.getElementById('settingsBtnText').textContent = t.settingsBtnText;
+  document.getElementById('restartBtnText').textContent = t.restartBtnText;
+  document.getElementById('guessCountLabel').textContent = t.guessCountLabel;
+  document.getElementById('guessListTitle').textContent = t.guessListTitle;
+  document.getElementById('lineColorTitle').textContent = t.lineColorTitle;
+  document.getElementById('bgStyleTitle').textContent = t.bgStyleTitle;
+  document.getElementById('toolsTitle').textContent = t.toolsTitle;
+  
+  // تنظیمات
+  document.getElementById('aboutGameTitle').textContent = t.aboutGameTitle;
+  document.getElementById('aboutGameText1').textContent = t.aboutGameText1;
+  document.getElementById('aboutGameText2').textContent = t.aboutGameText2;
+  document.getElementById('bonusCodeTitle').textContent = t.bonusCodeTitle;
+  document.getElementById('bonusBtn').textContent = t.bonusBtn;
+  document.getElementById('bonusHint').textContent = t.bonusHint;
+  document.getElementById('rangeTitle').textContent = t.rangeTitle;
+  document.getElementById('rangeBtn').textContent = t.rangeBtn;
+  document.getElementById('scoreTitle').textContent = t.scoreTitle;
+  document.getElementById('resetScoreBtn').textContent = t.resetScoreBtn;
+  document.getElementById('languageTitle').textContent = t.languageTitle;
+  document.getElementById('applyLanguageBtn').textContent = t.applyLanguageBtn;
+  
+  // دکمه‌های منو
+  const menuButtons = [
+    'lineBlueBtn', 'lineGreenBtn', 'lineYellowBtn', 'lineRedBtn',
+    'bgStyleNeonDark', 'bgStyleNeonWhite', 'bgStyleGalaxy', 'bgStyle3D',
+    'cycleLinesBtn', 'hintBtn', 'clearListBtn'
+  ];
+  
+  menuButtons.forEach((key, index) => {
+    const elements = document.querySelectorAll('.menuBtn .menuText');
+    if (elements[index] && t[key]) {
+      elements[index].textContent = t[key];
+    }
+  });
+  
+  const statusEl = document.getElementById('status');
+  if (!statusEl.classList.contains('good') && 
+      !statusEl.classList.contains('bad') && 
+      !statusEl.classList.contains('warn')) {
+    statusEl.textContent = t.initialMessage;
+  }
+  
+  const finalScoreEl = document.getElementById('finalScore');
+  if (finalScoreEl.textContent.includes('امتیاز نهایی') || 
+      finalScoreEl.textContent.includes('Final score') ||
+      finalScoreEl.textContent.includes('النتيجة النهائية') ||
+      finalScoreEl.textContent.includes('Финальный счет') ||
+      finalScoreEl.textContent.includes('最終スコア')) {
+    finalScoreEl.textContent = t.finalScoreDefault;
+  }
+  
+  // به‌روزرسانی زبان در سوئیچر
+  const langNames = {
+    'fa': {flag: '🇮🇷', name: 'فارسی'},
+    'en': {flag: '🇺🇸', name: 'English'},
+    'ar': {flag: '🇸🇦', name: 'العربية'},
+    'ru': {flag: '🇷🇺', name: 'Русский'},
+    'ja': {flag: '🇯🇵', name: '日本語'}
+  };
+  
+  if (langNames[lang]) {
+    document.getElementById('langText').textContent = langNames[lang].name;
+    document.getElementById('langText').previousElementSibling.textContent = langNames[lang].flag;
+  }
+  
+  localStorage.setItem('gameLanguage', lang);
+}
+
+// ==================== مدیریت انتخاب زبان اولیه ====================
+document.getElementById('langEnglish').addEventListener('click', () => {
+  document.getElementById('langModal').classList.add('hidden');
+  document.getElementById('langSwitcher').style.display = 'block';
+  updatePageLanguage('en');
+  triggerAnimation(document.getElementById('langEnglish'), 'success-bounce-animation');
+  playSound('select');
+});
+
+document.getElementById('langPersian').addEventListener('click', () => {
+  document.getElementById('langModal').classList.add('hidden');
+  document.getElementById('langSwitcher').style.display = 'block';
+  updatePageLanguage('fa');
+  triggerAnimation(document.getElementById('langPersian'), 'success-bounce-animation');
+  playSound('select');
+});
+
+document.getElementById('langArabic').addEventListener('click', () => {
+  document.getElementById('langModal').classList.add('hidden');
+  document.getElementById('langSwitcher').style.display = 'block';
+  updatePageLanguage('ar');
+  triggerAnimation(document.getElementById('langArabic'), 'success-bounce-animation');
+  playSound('select');
+});
+
+document.getElementById('langRussian').addEventListener('click', () => {
+  document.getElementById('langModal').classList.add('hidden');
+  document.getElementById('langSwitcher').style.display = 'block';
+  updatePageLanguage('ru');
+  triggerAnimation(document.getElementById('langRussian'), 'success-bounce-animation');
+  playSound('select');
+});
+
+document.getElementById('langJapanese').addEventListener('click', () => {
+  document.getElementById('langModal').classList.add('hidden');
+  document.getElementById('langSwitcher').style.display = 'block';
+  updatePageLanguage('ja');
+  triggerAnimation(document.getElementById('langJapanese'), 'success-bounce-animation');
+  playSound('select');
+});
+
+const savedLang = localStorage.getItem('gameLanguage');
+if (savedLang) {
+  document.getElementById('langModal').classList.add('hidden');
+  document.getElementById('langSwitcher').style.display = 'block';
+  updatePageLanguage(savedLang);
+} else {
+  document.getElementById('langModal').classList.remove('hidden');
+}
+
+// ==================== متغیرهای بازی ====================
+let minVal = 1;
+let maxVal = 2500;
+let target = Math.floor(Math.random()*(maxVal-minVal+1))+minVal;
+let hearts = 8;
+let buyLeft = 2;
+let guesses = 0;
+let score = 0;
+let yellowCardCount = 0;
+let lastGameScore = localStorage.getItem('lastGameScore') ? parseInt(localStorage.getItem('lastGameScore')) : 0;
+
+// ==================== متغیرهای پروفایل کاربر و XP ====================
+let userProfile = {
+  name: "بازیکن ناشناس",
+  avatar: "👤",
+  level: "مبتدی",
+  totalGames: 0,
+  totalWins: 0,
+  experience: 0,
+  levelNumber: 1,
+  xpCurrent: 0,
+  xpNeeded: 100
+};
+
+// ==================== سیستم هوش مصنوعی DARK_GPT پیشرفته ====================
+const aiKnowledgeBase = {
+  fa: {
+    // اطلاعات بازی
+    "عدد مخفی بازی چیست؟": `🔢 **عدد مخفی فعلی:** ${target}
+    
+📊 **اطلاعات بازی:**
+- بازه اعداد: ${minVal} تا ${maxVal}
+- حدس‌های شما: ${guesses}
+- قلب‌های باقی‌مانده: ${hearts}
+- خرید باقی‌مانده: ${buyLeft}
+
+💡 **نکته:** من عدد مخفی را می‌دانم اما نمی‌توانم مستقیم بگویم! سعی کن با استراتژی درست حدس بزنی! 🎯`,
+
+    "قوانین بازی چیست؟": `📜 **قوانین کامل بازی حدس عدد:**
+
+🎯 **هدف بازی:** 
+حدس زدن عدد تصادفی بین بازه تعیین شده
+
+❤️ **سیستم قلب‌ها:**
+- شروع بازی با ۸ قلب
+- هر حدس غلط = ۱ قلب کم می‌شود
+- خرید قلب: فقط ۲ بار در هر بازی
+- حتی با قلب کامل هم می‌توانید خرید کنید
+
+⚠️ **سیستم کارت‌ها:**
+🟡 **کارت زرد:** حدس خارج از محدوده
+  - بار اول: ۱ قلب
+  - بار دوم: ۲ قلب
+🔴 **کارت قرمز:** بعد از دو کارت زرد
+  - ۴ قلب کم می‌شود
+  - شمارنده کارت زرد ریست می‌شود
+
+🏆 **برنده شدن:**
+- قبل از اتمام قلب‌ها عدد را حدس بزنید
+- امتیاز نهایی = (قلب‌ها × ۱۰) - (حدس‌ها × ۲)
+
+⭐ **سیستم XP:**
+- برنده شدن: +۱۰ XP
+- باختن: +۳ XP
+- تغییر پروفایل: +۵ XP
+- سطح‌بندی: مبتدی → متوسط → حرفه‌ای
+
+🔧 **تنظیمات قابل تغییر:**
+- تغییر بازه اعداد (پیش‌فرض: ۱-۲۵۰۰)
+- تغییر زبان (۵ زبان)
+- تغییر تم و رنگ خطوط
+- ذخیره خودکار پیشرفت`,
+
+    "چطور برنده شوم؟": `🏆 **استراتژی‌های برنده شدن:**
+
+🎯 **روش دودویی (بهینه‌ترین روش):**
+1. همیشه وسط بازه فعلی را حدس بزن
+2. مثال: اگر بازه ۱-۱۰۰۰ است، اول ۵۰۰ را حدس بزن
+3. اگر گفت "بالاتر"، بازه جدید ۵۰۱-۱۰۰۰
+4. اگر گفت "پایین‌تر"، بازه جدید ۱-۴۹۹
+5. این روند را ادامه بده
+
+📈 **مزایای روش دودویی:**
+- حداکثر ۱۲ حدس برای برنده شدن
+- قطعی و ریاضی‌محور
+- بدون شانس و حدس زدن تصادفی
+
+💡 **نکات طلایی:**
+1. **صبر داشته باش:** عجله نکن
+2. **مدیریت قلب:** مراقب کارت زرد باش
+3. **یادداشت کن:** بازه‌ها را یادداشت کن
+4. **تمرکز کن:** اعداد را به درستی وارد کن
+
+🎮 **مثال عملی:**
+بازه: ۱-۱۰۰۰
+حدس ۱: ۵۰۰ → "پایین‌تر"
+بازه جدید: ۱-۴۹۹
+حدس ۲: ۲۵۰ → "بالاتر"
+بازه جدید: ۲۵۱-۴۹۹
+حدس ۳: ۳۷۵ → ... و ادامه
+
+با این روش حداکثر در log₂(بازه) قدم برنده می‌شی! 🧮`,
+
+    "چگونه قلب بخرم؟": `❤️ **راهنمای خرید قلب:**
+
+🛒 **مراحل خرید:**
+1. روی دکمه "خرید قلب" کلیک کن
+2. هر خرید ۱ قلب اضافه می‌کند
+3. فقط ۲ بار در هر بازی مجاز هستی
+4. حتی اگر قلب کامل باشی هم می‌توانی بخری
+
+💰 **قیمت:** رایگان! فقط محدودیت تعداد دارد
+
+⚠️ **محدودیت‌ها:**
+- حداکثر ۲ بار خرید در هر بازی
+- خرید XP نمی‌دهد
+- اگر بازی را ببازی، خریدها ریست می‌شوند
+
+🎯 **استراتژی خرید:**
+بهترین زمان برای خرید:
+1. وقتی ۲-۳ قلب داری
+2. نزدیک به حدس درست هستی
+3. نمی‌خواهی بازی را ببازی
+
+🔄 **توجه:** بعد از باختن یا برنده شدن، تعداد خریدها برای بازی جدید ریست می‌شود`,
+
+    "سیستم xp چطور کار می‌کند؟": `⭐ **سیستم تجربه (XP) کامل:**
+
+📊 **دریافت XP:**
+- 🏆 **برنده شدن:** +۱۰ XP
+- 💔 **باختن:** +۳ XP
+- 👤 **تغییر پروفایل:** +۵ XP
+- 🎮 **تکمیل بازی:** +۲ XP
+
+📈 **سطح‌بندی:**
+- **سطح ۱-۱۰: مبتدی** (۰-۱۰۰ XP)
+- **سطح ۱۱-۲۰: متوسط** (۱۰۰-۵۰۰ XP) 
+- **سطح ۲۱+: حرفه‌ای** (۵۰۰+ XP)
+
+🎁 **مزایای هر سطح:**
+- **سطح ۵:** رنگ‌های جدید خطوط
+- **سطح ۱۰:** آواتارهای ویژه
+- **سطح ۱۵:** انیمیشن‌های پیشرفته
+- **سطح ۲۰:** تم‌های اختصاصی
+
+💾 **ذخیره سازی:**
+XP شما همیشه ذخیره می‌شود
+حتی اگر بازی را ببندی یا دوباره باز کنی
+
+📱 **نمایش:**
+نوار XP در بالای صفحه نشان داده می‌شود
+درصد پیشرفت و سطح بعدی قابل مشاهده است
+
+🏅 **هدف نهایی:** رسیدن به سطح حرفه‌ای و باز کردن تمام ویژگی‌ها!`,
+
+    // دانش عمومی
+    "سلام": `سلام! 👋 
+من **DARK_GPT** هستم، یک هوش مصنوعی پیشرفته که می‌توانم به هر سوالی پاسخ دهم!
+
+🌟 **می‌توانم در مورد:**
+- 🎮 بازی و استراتژی‌ها
+- 📚 دانش عمومی و تخصصی  
+- 💻 برنامه‌نویسی و تکنولوژی
+- 🧠 فلسفه و روانشناسی
+- 🎨 هنر و خلاقیت
+- و هر موضوع دیگری کمکتان کنم!
+
+سوال خود را بپرسید، منتظر کمک به شما هستم! ✨`,
+
+    "خداحافظ": `خداحافظ! 👋
+امیدوارم از بازی لذت برده باشید.
+اگر سوالی داشتید، من همیشه اینجا هستم!
+بازی موفق و روز خوبی داشته باشید! 🎮✨
+
+**DARK_GPT** همیشه در خدمت شما! 🤖`,
+
+    "چطوری": `عالی هستم! 🤖✨
+من یک هوش مصنوعی همیشه آماده‌ام!
+منتظر سوالات جالب شما هستم.
+
+امروز چه کاری می‌توانم برایتان انجام دهم؟
+شاید درباره بازی سوالی دارید؟
+یا موضوع دیگری که می‌خواهید یاد بگیرید؟ 📚
+
+در خدمت شما هستم! 🎯`,
+
+    "کمک": `حتما! 🙌
+من اینجا هستم تا کمک کنم!
+
+🎮 **در مورد بازی:**
+- قوانین و استراتژی‌ها
+- عدد مخفی و راهنمایی
+- سیستم XP و قلب‌ها
+
+🧠 **دانش عمومی:**
+- ریاضیات و علوم
+- تاریخ و جغرافیا
+- فلسفه و روانشناسی
+
+💻 **تکنولوژی:**
+- برنامه‌نویسی
+- هوش مصنوعی
+- طراحی وب
+
+🎨 **خلاقانه:**
+- داستان‌نویسی
+- شعر و ادبیات
+- ایده‌های نو
+
+📚 **آموزشی:**
+- یادگیری مهارت‌ها
+- حل مسئله
+- مشاوره تحصیلی
+
+سوال خود را دقیق‌تر بپرسید تا بهتر کمک کنم! 🔍`,
+
+    "سازنده بازی کیست؟": `🎮 **تیم سازنده بازی:**
+
+👨‍💻 **برنامه‌نویس اصلی:**
+**پارسا مجرد**
+- توسعه‌دهنده بازی و رابط کاربری
+- طراح سیستم‌های پیچیده
+- مسئول هوش مصنوعی و انیمیشن‌ها
+
+💡 **ایده‌پرداز و مشاور:**
+**حسین گلزاری**
+- ارائه ایده اولیه بازی
+- مشاوره در طراحی مکانیک‌ها
+- تست و بازخورد بازی
+
+🎨 **طراحی و گرافیک:**
+تیم طراحی اختصاصی
+- طراحی رابط کاربری نئونی
+- انیمیشن‌های پیشرفته
+- گرادیانت‌های رنگی
+
+🌍 **پشتیبانی زبانی:**
+تیم ترجمه چندزبانه
+- فارسی، انگلیسی، عربی
+- روسی، ژاپنی
+
+✨ **ویژگی‌های بازی:**
+- طراحی نئونی با انیمیشن‌های زیبا
+- سیستم XP و سطح‌بندی
+- پروفایل کاربر با آواتار
+- پشتیبانی از ۵ زبان
+- هوش مصنوعی کمک‌رسان (من!)
+- خطوط متحرک در پس‌زمینه
+- انواع تم‌های مختلف
+- سیستم ذخیره خودکار
+- صداهای جذاب
+- ریسپانسیو برای موبایل
+
+🎯 **هدف بازی:**
+ارائه تجربه‌ای منحصر به فرد و آموزشی
+در قالب یک بازی سرگرم کننده!`,
+
+    "ویژگی‌های بازی": `✨ **ویژگی‌های کامل بازی:**
+
+🎨 **طراحی و گرافیک:**
+- رابط کاربری نئونی مدرن
+- انیمیشن‌های روان و زیبا
+- گرادیانت‌های رنگی متغیر
+- خطوط متحرک در پس‌زمینه
+- افکت‌های نور و سایه
+
+🎮 **مکانیک بازی:**
+- سیستم قلب‌های محدود
+- کارت‌های زرد و قرمز
+- خرید قلب با محدودیت
+- تغییر بازه اعداد
+- سیستم امتیازدهی هوشمند
+
+👤 **پروفایل کاربری:**
+- شخصی‌سازی نام و آواتار
+- سیستم XP و سطح‌بندی
+- ذخیره خودکار پیشرفت
+- آمار و اطلاعات بازی
+
+🌍 **چندزبانه:**
+- پشتیبانی از ۵ زبان
+- ترجمه کامل همه بخش‌ها
+- تغییر زنده زبان
+
+🤖 **هوش مصنوعی:**
+- دستیار هوشمند بازی (من!)
+- پاسخ به سوالات بازی
+- دانش عمومی گسترده
+- کمک در استراتژی‌ها
+
+⚙️ **تنظیمات پیشرفته:**
+- تغییر تم‌های مختلف
+- تنظیم رنگ خطوط
+- فعال/غیرفعال کردن صداها
+- ذخیره خودکار
+
+📱 **بهینه‌سازی:**
+- ریسپانسیو کامل
+- عملکرد بالا در موبایل
+- کاهش مصرف باتری
+- پشتیبانی از مرورگرهای مختلف
+
+🔊 **صدا و موسیقی:**
+- افکت‌های صوتی متنوع
+- تنظیمات حجم صدا
+- صدای مخصوص هر عمل
+
+💾 **ذخیره‌سازی:**
+- ذخیره خودکار بازی
+- بازیابی وضعیت قبلی
+- پروفایل ابری (در صورت نیاز)
+
+🎯 **هدف:**
+ایجاد تجربه‌ای منحصر به فرد
+ترکیب بازی، آموزش و سرگرمی!`,
+
+    // دانش عمومی گسترده
+    "ریاضی چیست؟": `🧮 **ریاضیات: زبان جهان**
+    
+ریاضیات علم مطالعهٔ کمیت‌ها، ساختارها، فضا و تغییرات است. 
+
+📚 **شاخه‌های اصلی:**
+1. **حساب:** اعداد و عملیات پایه
+2. **جبر:** معادلات و روابط
+3. **هندسه:** اشکال و فضا
+4. **حسابان:** تغییر و حرکت
+5. **آمار:** داده‌ها و احتمال
+
+💡 **کاربردهای ریاضی:**
+- علم و تکنولوژی 🚀
+- مهندسی و ساخت 🏗️
+- اقتصاد و مالی 💰
+- کامپیوتر و هوش مصنوعی 💻
+- طبیعت و کیهان 🌌
+
+✨ **نکته جالب:**
+ریاضیات زبانی است که جهان با آن صحبت می‌کند!
+از حرکت سیارات تا رشد گیاهان، همه از قوانین ریاضی پیروی می‌کنند.`,
+
+    "برنامه نویسی چیست؟": `💻 **برنامه‌نویسی: هنر صحبت با کامپیوتر**
+
+برنامه‌نویسی فرآیند نوشتن دستورالعمل‌هایی است که کامپیوترها می‌توانند آنها را اجرا کنند.
+
+🛠️ **زبان‌های برنامه‌نویسی محبوب:**
+- **Python:** ساده و قدرتمند، مناسب شروع
+- **JavaScript:** برای وب و بازی‌های مرورگر
+- **Java:** برنامه‌های اندروید و سازمانی
+- **C++:** بازی‌ها و نرم‌افزارهای سیستمی
+- **C#:** توسعه بازی با Unity
+
+🎯 **چگونه شروع کنیم؟**
+1. **انتخاب زبان:** با Python یا JavaScript شروع کن
+2. **یادگیری مبانی:** متغیرها، حلقه‌ها، شرط‌ها
+3. **تمرین:** پروژه‌های کوچک بساز
+4. **پیشرفت:** یادگیری مفاهیم پیشرفته‌تر
+
+🚀 **فرصت‌های شغلی:**
+- توسعه وب و اپلیکیشن
+- هوش مصنوعی و داده‌کاوی
+- امنیت سایبری
+- توسعه بازی
+- خودکارسازی فرآیندها
+
+💡 **نکته:** برنامه‌نویسی مانند حل مسئله است. باید منطقی فکر کنی و راه‌حل‌های خلاقانه پیدا کنی!`,
+
+    "هوش مصنوعی چیست؟": `🧠 **هوش مصنوعی: شبیه‌سازی هوش انسان**
+
+هوش مصنوعی شاخه‌ای از علوم کامپیوتر است که به ایجاد ماشین‌های هوشمند می‌پردازد.
+
+🤖 **انواع هوش مصنوعی:**
+1. **ANI:** هوش مصنوعی محدود (مثل من!)
+2. **AGI:** هوش مصنوعی عمومی (شبیه انسان)
+3. **ASI:** هوش مصنوعی فرابشر
+
+🔧 **فناوری‌های اصلی:**
+- **یادگیری ماشین:** یادگیری از داده‌ها
+- **شبکه‌های عصبی:** شبیه‌سازی مغز انسان
+- **پردازش زبان طبیعی:** درک زبان انسان
+- **بینایی کامپیوتر:** درک تصاویر
+
+🏥 **کاربردها:**
+- تشخیص بیماری‌ها
+- خودروهای خودران
+- دستیارهای هوشمند
+- توصیه‌گرهای محتوا
+- امنیت سایبری
+
+⚖️ **چالش‌های اخلاقی:**
+- حریم خصوصی
+- اشتغال و جایگزینی
+- سوگیری الگوریتمی
+- امنیت و کنترل
+
+💭 **آینده:** هوش مصنوعی در حال تغییر جهان است و باید با مسئولیت توسعه یابد.`,
+
+    "یک داستان کوتاه بگو": `📖 **داستان کوتاه: راز اعداد**
+
+در سرزمینی دور، عددی به نام "آریا" زندگی می‌کرد که دوست داشت همیشه مخفی بماند. آریا در قلعه‌ای از اعداد پنهان شده بود، بین ${minVal} و ${maxVal}.
+
+هر روز، ماجراجویانی از راه می‌رسیدند تا آریا را پیدا کنند. آنها با قلب‌هایی از جنس احساس می‌آمدند، اما هر حدس اشتباه قلب‌شان را می‌شکست.
+
+یکی از ماجراجویان به نام "دانا" راه متفاوتی را انتخاب کرد. به جای حدس‌های تصادفی، از منطق ریاضی استفاده کرد. او همیشه عدد وسط را انتخاب می‌کرد و با هر پاسخ، محدوده را نصف می‌کرد.
+
+در نهایت، پس از چندین تلاش منطقی، دانا موفق شد آریا را پیدا کند. اما راز بزرگ این بود: آریا نمی‌خواست مخفی بماند، می‌خواست کسی او را با منطق و صبر پیدا کند.
+
+**پند داستان:** 
+گاهی پاسخ مسائل زندگی نه در حدس‌های شانسی، که در تفکر منطقی و صبر نهفته است. عدد مخفی زندگی هر کدام از ما، منتظر است تا با خرد و حوصله کشف شود. 🔍✨`,
+
+    "یک شعر بگو": `🎭 **شعر: نغمه اعداد**
+
+در قلمرو سایه‌های نئونی،
+جایی که اعداد رقصانند به نغمه‌های ابدی،
+قلب‌ها می‌تپند به ریتم حدس‌ها،
+و ذهن می‌رقصد با هر پاسخ.
+
+از یک تا ${maxVal}، سفری است بی‌کران،
+هر عدد رازی است، هر حدس داستانی،
+کارت زرد هشدار، قرمز بیم،
+اما پیروزی آنجا که منطق حکم‌رانی.
+
+ای بازیکن راسخ، با دل استوار،
+بدان که عدد مخفی، نه دشمن که یار است،
+او می‌خواهد تا با خرد یافته شوی،
+نه با شانس، که با دانش برنده شوی.
+
+پس بیندیش، محاسبه کن، سپس حدس بزن،
+که در این بازی زیبا، عقل است رهنمای،
+و هر شکست، پلی است به سوی پیروزی،
+در قلمرو اعداد، جایی که خرد پادشاهی. 👑✨`,
+
+    "نظری درباره بازی داری؟": `🌟 **تحلیل DARK_GPT از بازی:**
+
+🎮 **نقاط قوت:**
+1. **طراحی منحصر به فرد:** ترکیب نئون و تاریکی جذاب است
+2. **مکانیک هوشمند:** سیستم قلب‌ها و کارت‌ها تعادل خوبی ایجاد کرده
+3. **آموزشی بودن:** بازیکنان ناخودآگاه ریاضی و منطق یاد می‌گیرند
+4. **چندزبانه:** در دسترس کاربران مختلف جهان
+5. **سیستم XP:** انگیزه‌بخش برای ادامه بازی
+
+💡 **پیشنهادات من:**
+1. **حالت چندنفره:** رقابت با دوستان
+2. **چالش روزانه:** عدد مخفی خاص هر روز
+3. **داستان‌سازی:** روایتی برای بازی
+4. **آمار پیشرفته:** تحلیل عملکرد بازیکن
+5. **دستاوردها:** نشان‌های ویژه برای موفقیت‌ها
+
+🧠 **ارزش آموزشی:**
+- تقویت تفکر منطقی
+- آموزش الگوریتم جستجوی دودویی
+- مدیریت منابع (قلب‌ها)
+- تصمیم‌گیری تحت فشار
+
+🎯 **نتیجه‌گیری:**
+این بازی نه تنها سرگرم‌کننده، بلکه ابزار آموزشی ارزشمندی است. ترکیب زیبایی از هنر، ریاضی و روانشناسی که می‌تواند ذهن را به چالش بکشد و تقویت کند.
+
+به سازندگان تبریک می‌گویم! بازی‌ای خلق کرده‌اند که هم سرگرم می‌کند و هم آموزش می‌دهد. 🙌`,
+
+    // پاسخ‌های پیش‌فرض
+    "default": `🤔 **سوال جالبی پرسیدید!**
+
+من DARK_GPT هستم، یک هوش مصنوعی که می‌توانم درباره موضوعات مختلف صحبت کنم:
+
+🎮 **در مورد بازی:** 
+- قوانین و استراتژی‌ها
+- عدد مخفی و راهنمایی
+- سیستم XP و ویژگی‌ها
+
+🧠 **دانش عمومی:**
+- علوم و ریاضیات
+- تاریخ و فلسفه
+- تکنولوژی و آینده
+
+💡 **خلاقیت:**
+- داستان‌نویسی و شعر
+- حل مسئله
+- ایده‌پردازی
+
+📚 **آموزشی:**
+- مهارت‌های یادگیری
+- راهنمایی تحصیلی
+- توسعه شخصی
+
+لطفاً سوال خود را دقیق‌تر بپرسید تا بهتر بتوانم کمک کنم! یا می‌توانید از دکمه‌های سریع استفاده کنید. 🔍✨`
+  },
+  
+  en: {
+    "what is the secret number?": `🔢 **Current Secret Number:** ${target}
+    
+📊 **Game Info:**
+- Number range: ${minVal} to ${maxVal}
+- Your guesses: ${guesses}
+- Hearts remaining: ${hearts}
+- Buys remaining: ${buyLeft}
+
+💡 **Hint:** I know the secret number but can't tell directly! Try using the right strategy! 🎯`,
+
+    "hello": `Hello! 👋 
+I'm **DARK_GPT**, an advanced AI that can answer any question!
+
+🌟 **I can help with:**
+- 🎮 Game strategies and rules
+- 📚 General and specialized knowledge  
+- 💻 Programming and technology
+- 🧠 Philosophy and psychology
+- 🎨 Art and creativity
+- And any other topic!
+
+Ask your question, I'm here to help! ✨`,
+
+    "default": `🤔 **Interesting question!**
+
+I'm DARK_GPT, an AI that can talk about various topics:
+
+🎮 **About the game:**
+- Rules and strategies
+- Secret number and hints
+- XP system and features
+
+🧠 **General knowledge:**
+- Science and mathematics
+- History and philosophy
+- Technology and future
+
+💡 **Creativity:**
+- Storytelling and poetry
+- Problem solving
+- Idea generation
+
+📚 **Educational:**
+- Learning skills
+- Academic guidance
+- Personal development
+
+Please ask your question more specifically so I can help better! Or you can use the quick buttons. 🔍✨`
+  }
+};
+
+// تابع برای پردازش سوالات هوش مصنوعی
+function processAIQuestion(question) {
+  const lang = currentLanguage;
+  const questionLower = question.toLowerCase().trim();
+  
+  // جستجو در دانش‌پایه بر اساس زبان
+  if (aiKnowledgeBase[lang]) {
+    // جستجوی دقیق
+    for (const [key, answer] of Object.entries(aiKnowledgeBase[lang])) {
+      if (questionLower.includes(key.toLowerCase())) {
+        return answer;
+      }
+    }
+  }
+  
+  // جستجوی در زبان‌های دیگر اگر در زبان فعلی پیدا نشد
+  if (lang !== 'en' && aiKnowledgeBase.en) {
+    for (const [key, answer] of Object.entries(aiKnowledgeBase.en)) {
+      if (questionLower.includes(key.toLowerCase())) {
+        return answer;
+      }
+    }
+  }
+  
+  // پاسخ پیش‌فرض
+  return aiKnowledgeBase[lang]?.default || aiKnowledgeBase.en?.default || "I'm here to help! Ask me anything! 🤖";
+}
+
+// تابع برای اضافه کردن پیام به چت
+function addAIMessage(message, isUser = false) {
+  const messagesEl = document.getElementById('aiMessages');
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `ai-message ${isUser ? 'user' : 'bot'}`;
+  messageDiv.innerHTML = message; // استفاده از innerHTML برای فرمت‌بندی
+  messagesEl.appendChild(messageDiv);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+// تابع برای شبیه‌سازی تایپ کردن
+function simulateTyping(response) {
+  const messagesEl = document.getElementById('aiMessages');
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'ai-typing';
+  typingDiv.innerHTML = '<span></span><span></span><span></span>';
+  messagesEl.appendChild(typingDiv);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  
+  return new Promise(resolve => {
+    setTimeout(() => {
+      messagesEl.removeChild(typingDiv);
+      addAIMessage(response, false);
+      resolve();
+    }, 800 + (response.length * 15)); // تایپ کردن بر اساس طول پاسخ
+  });
+}
+
+// ==================== DOM Elements ====================
+const heartsEl = document.getElementById('hearts');
+const buyBtn = document.getElementById('buyBtn');
+const guessInput = document.getElementById('guessInput');
+const guessBtn = document.getElementById('guessBtn');
+const statusEl = document.getElementById('status');
+const guessCountEl = document.getElementById('guessCount');
+const sideGuessCountEl = document.getElementById('sideGuessCount');
+const guessListEl = document.getElementById('guessList');
+const finalScoreEl = document.getElementById('finalScore');
+const restartBtn = document.getElementById('restartBtn');
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsCard = document.getElementById('settingsCard');
+const bonusBtn = document.getElementById('bonusBtn');
+const bonusCodeEl = document.getElementById('bonusCode');
+const minInput = document.getElementById('minInput');
+const maxInput = document.getElementById('maxInput');
+const rangeBtn = document.getElementById('rangeBtn');
+const scoreView = document.getElementById('scoreView');
+const resetScoreBtn = document.getElementById('resetScoreBtn');
+const languageSelect = document.getElementById('languageSelect');
+const applyLanguageBtn = document.getElementById('applyLanguageBtn');
+
+// عناصر پروفایل و XP
+const currentAvatarEl = document.getElementById('currentAvatar');
+const profileNameEl = document.getElementById('profileName');
+const profileLevelEl = document.getElementById('profileLevel');
+const profileNameInput = document.getElementById('profileNameInput');
+const saveProfileBtn = document.getElementById('saveProfileBtn');
+const avatarsGrid = document.getElementById('avatarsGrid');
+const xpCurrentEl = document.getElementById('xpCurrent');
+const xpNeededEl = document.getElementById('xpNeeded');
+const xpFillEl = document.getElementById('xpFill');
+const xpLevelEl = document.getElementById('xpLevel');
+const xpProgressEl = document.getElementById('xpProgress');
+
+// عناصر هوش مصنوعی
+const aiAssistantBtn = document.getElementById('aiAssistantBtn');
+const aiChatPanel = document.getElementById('aiChatPanel');
+const aiCloseBtn = document.getElementById('aiCloseBtn');
+const aiMessages = document.getElementById('aiMessages');
+const aiInput = document.getElementById('aiInput');
+const aiSendBtn = document.getElementById('aiSendBtn');
+const aiQuickButtons = document.querySelectorAll('.ai-quick-btn');
+const aiBadge = document.getElementById('aiBadge');
+
+const lineBlueBtn = document.getElementById('lineBlueBtn');
+const lineGreenBtn = document.getElementById('lineGreenBtn');
+const lineYellowBtn = document.getElementById('lineYellowBtn');
+const lineRedBtn = document.getElementById('lineRedBtn');
+const cycleLinesBtn = document.getElementById('cycleLinesBtn');
+const hintBtn = document.getElementById('hintBtn');
+const clearListBtn = document.getElementById('clearListBtn');
+
+const bgStyleNeonDarkBtn = document.getElementById('bgStyleNeonDark');
+const bgStyleNeonWhiteBtn = document.getElementById('bgStyleNeonWhite');
+const bgStyleGalaxyBtn = document.getElementById('bgStyleGalaxy');
+const bgStyle3DBtn = document.getElementById('bgStyle3D');
+
+// ==================== سیستم صداهای پیشرفته ====================
+let audioCtx = null;
+const soundEnabled = true;
+
+function playSound(type) {
+  if (!soundEnabled) return;
+  
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // رزوم کردن context در صورت نیاز
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    // تنظیمات بر اساس نوع صدا
+    let frequency = 440;
+    let duration = 0.1;
+    let waveType = 'sine';
+    let volume = 0.1;
+    
+    switch(type) {
+      case 'click':
+        frequency = 500;
+        duration = 0.05;
+        waveType = 'sine';
+        break;
+      case 'guess':
+        frequency = 600;
+        duration = 0.15;
+        waveType = 'sine';
+        break;
+      case 'buy':
+        frequency = 800;
+        duration = 0.2;
+        waveType = 'triangle';
+        break;
+      case 'win':
+        frequency = 900;
+        duration = 0.5;
+        waveType = 'sine';
+        volume = 0.15;
+        oscillator.frequency.setValueAtTime(900, audioCtx.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.2);
+        oscillator.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.4);
+        break;
+      case 'lose':
+        frequency = 300;
+        duration = 0.8;
+        waveType = 'sawtooth';
+        volume = 0.12;
+        oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.3);
+        oscillator.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.6);
+        break;
+      case 'select':
+        frequency = 700;
+        duration = 0.1;
+        waveType = 'square';
+        break;
+      case 'error':
+        frequency = 200;
+        duration = 0.2;
+        waveType = 'square';
+        break;
+      case 'menu':
+        frequency = 400;
+        duration = 0.1;
+        waveType = 'sine';
+        break;
+      case 'bonus':
+        frequency = 1000;
+        duration = 0.4;
+        waveType = 'sine';
+        break;
+      case 'heart':
+        frequency = 600;
+        duration = 0.15;
+        waveType = 'sine';
+        break;
+      case 'range':
+        frequency = 550;
+        duration = 0.2;
+        waveType = 'sine';
+        break;
+      case 'reset':
+        frequency = 300;
+        duration = 0.25;
+        waveType = 'sine';
+        break;
+      case 'hint':
+        frequency = 450;
+        duration = 0.18;
+        waveType = 'triangle';
+        break;
+      case 'clear':
+        frequency = 350;
+        duration = 0.22;
+        waveType = 'sawtooth';
+        break;
+      case 'profile':
+        frequency = 650;
+        duration = 0.3;
+        waveType = 'sine';
+        volume = 0.12;
+        break;
+      case 'ai':
+        frequency = 750;
+        duration = 0.25;
+        waveType = 'sine';
+        volume = 0.15;
+        break;
+      default:
+        frequency = 440;
+        duration = 0.1;
+        waveType = 'sine';
+    }
+    
+    oscillator.type = waveType;
+    if (type !== 'win' && type !== 'lose') {
+      oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+    }
+    
+    gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + duration);
+  } catch(e) {
+    console.log("Audio error:", e);
+  }
+}
+
+// ==================== سیستم انیمیشن ====================
+function triggerAnimation(element, animationClass) {
+  if (!element) return;
+  
+  element.classList.add(animationClass);
+  setTimeout(() => {
+    element.classList.remove(animationClass);
+  }, 800);
+}
+
+// ==================== سیستم پروفایل کاربر و XP ====================
+const availableAvatars = [
+  { emoji: "👤", color: "linear-gradient(135deg, #00f5ff, #00ff88)" },
+  { emoji: "😎", color: "linear-gradient(135deg, #ff7f50, #ffdd55)" },
+  { emoji: "🤖", color: "linear-gradient(135deg, #a855f7, #ec4899)" },
+  { emoji: "🦊", color: "linear-gradient(135deg, #f97316, #f59e0b)" },
+  { emoji: "🐱", color: "linear-gradient(135deg, #84cc16, #10b981)" },
+  { emoji: "🦁", color: "linear-gradient(135deg, #f59e0b, #d97706)" },
+  { emoji: "🐯", color: "linear-gradient(135deg, #ea580c, #dc2626)" },
+  { emoji: "🐼", color: "linear-gradient(135deg, #000000, #ffffff)" },
+  { emoji: "🐨", color: "linear-gradient(135deg, #a3a3a3, #525252)" },
+  { emoji: "🐵", color: "linear-gradient(135deg, #ca8a04, #854d0e)" },
+  { emoji: "🦄", color: "linear-gradient(135deg, #c084fc, #db2777)" },
+  { emoji: "🐲", color: "linear-gradient(135deg, #10b981, #059669)" }
+];
+
+function loadUserProfile() {
+  const savedProfile = localStorage.getItem('userProfile');
+  if (savedProfile) {
+    try {
+      userProfile = JSON.parse(savedProfile);
+    } catch (e) {
+      console.error('Error loading profile:', e);
+    }
+  }
+  updateProfileDisplay();
+  renderAvatarOptions();
+  updateXPBars();
+}
+
+function saveUserProfile() {
+  localStorage.setItem('userProfile', JSON.stringify(userProfile));
+}
+
+function updateProfileDisplay() {
+  currentAvatarEl.textContent = userProfile.avatar;
+  currentAvatarEl.style.background = availableAvatars.find(a => a.emoji === userProfile.avatar)?.color || 
+                                     "linear-gradient(135deg, #00f5ff, #00ff88)";
+  profileNameEl.textContent = userProfile.name;
+  
+  // محاسبه سطح بر اساس تجربه
+  if (userProfile.experience >= 500) {
+    userProfile.level = currentLanguage === 'fa' ? "حرفه‌ای" : 
+                       currentLanguage === 'en' ? "Professional" :
+                       currentLanguage === 'ar' ? "محترف" :
+                       currentLanguage === 'ru' ? "Профессионал" : "プロ";
+    userProfile.levelNumber = Math.floor(userProfile.experience / 100) + 1;
+  } else if (userProfile.experience >= 100) {
+    userProfile.level = currentLanguage === 'fa' ? "متوسط" : 
+                       currentLanguage === 'en' ? "Intermediate" :
+                       currentLanguage === 'ar' ? "متوسط" :
+                       currentLanguage === 'ru' ? "Средний" : "中級";
+    userProfile.levelNumber = Math.floor(userProfile.experience / 50) + 1;
+  } else {
+    userProfile.level = currentLanguage === 'fa' ? "مبتدی" : 
+                       currentLanguage === 'en' ? "Beginner" :
+                       currentLanguage === 'ar' ? "مبتدئ" :
+                       currentLanguage === 'ru' ? "Начинающий" : "初心者";
+    userProfile.levelNumber = Math.floor(userProfile.experience / 10) + 1;
+  }
+  
+  // تنظیم XP مورد نیاز برای سطح بعدی
+  if (userProfile.levelNumber < 10) {
+    userProfile.xpNeeded = userProfile.levelNumber * 100;
+  } else if (userProfile.levelNumber < 20) {
+    userProfile.xpNeeded = 1000 + (userProfile.levelNumber - 10) * 200;
+  } else {
+    userProfile.xpNeeded = 3000 + (userProfile.levelNumber - 20) * 500;
+  }
+  
+  userProfile.xpCurrent = userProfile.experience % userProfile.xpNeeded;
+  
+  profileLevelEl.textContent = (currentLanguage === 'fa' ? "سطح: " : 
+                               currentLanguage === 'en' ? "Level: " :
+                               currentLanguage === 'ar' ? "مستوى: " :
+                               currentLanguage === 'ru' ? "Уровень: " : "レベル: ") + 
+                               `${userProfile.level} (${userProfile.levelNumber})`;
+}
+
+function updateXPBars() {
+  const xpPercent = Math.min(100, (userProfile.xpCurrent / userProfile.xpNeeded) * 100);
+  
+  xpCurrentEl.textContent = userProfile.xpCurrent;
+  xpNeededEl.textContent = userProfile.xpNeeded;
+  xpFillEl.style.width = `${xpPercent}%`;
+  xpLevelEl.textContent = (currentLanguage === 'fa' ? "سطح: " : 
+                          currentLanguage === 'en' ? "Level: " :
+                          currentLanguage === 'ar' ? "مستوى: " :
+                          currentLanguage === 'ru' ? "Уровень: " : "レベル: ") + 
+                          `${userProfile.level} (${userProfile.levelNumber})`;
+  xpProgressEl.textContent = `${Math.round(xpPercent)}%`;
+}
+
+function addXP(amount) {
+  userProfile.experience += amount;
+  
+  // بررسی سطح‌آپ
+  const oldLevel = userProfile.levelNumber;
+  updateProfileDisplay();
+  
+  if (userProfile.levelNumber > oldLevel) {
+    // کاربر سطح‌آپ کرده
+    const levelUpMessages = {
+      fa: `🎉 تبریک! شما به سطح ${userProfile.levelNumber} رسیدید!`,
+      en: `🎉 Congratulations! You reached level ${userProfile.levelNumber}!`,
+      ar: `🎉 تهانينا! لقد وصلت إلى المستوى ${userProfile.levelNumber}!`,
+      ru: `🎉 Поздравляем! Вы достигли уровня ${userProfile.levelNumber}!`,
+      ja: `🎉 おめでとうございます！レベル${userProfile.levelNumber}に到達しました！`
+    };
+    
+    setStatus('good', levelUpMessages[currentLanguage] || levelUpMessages.en);
+    triggerAnimation(document.querySelector('.xp-bar-container'), 'success-bounce-animation');
+    playSound('win');
+    
+    // نشان دادن بادج در دکمه هوش مصنوعی
+    showAIBadge();
+  }
+  
+  updateXPBars();
+  saveUserProfile();
+}
+
+function showAIBadge() {
+  aiBadge.style.display = 'block';
+  aiBadge.textContent = '!';
+  
+  // پنهان کردن بادج بعد از 10 ثانیه
+  setTimeout(() => {
+    aiBadge.style.display = 'none';
+  }, 10000);
+}
+
+function renderAvatarOptions() {
+  avatarsGrid.innerHTML = '';
+  
+  availableAvatars.forEach((avatar, index) => {
+    const avatarElement = document.createElement('div');
+    avatarElement.className = `avatar-option ${avatar.emoji === userProfile.avatar ? 'selected' : ''}`;
+    avatarElement.style.background = avatar.color;
+    avatarElement.textContent = avatar.emoji;
+    avatarElement.title = currentLanguage === 'fa' ? `آواتار ${index + 1}` : 
+                         currentLanguage === 'en' ? `Avatar ${index + 1}` :
+                         currentLanguage === 'ar' ? `الصورة الرمزية ${index + 1}` :
+                         currentLanguage === 'ru' ? `Аватар ${index + 1}` : `アバター ${index + 1}`;
+    
+    avatarElement.addEventListener('click', () => {
+      userProfile.avatar = avatar.emoji;
+      updateProfileDisplay();
+      renderAvatarOptions();
+      triggerAnimation(avatarElement, 'success-bounce-animation');
+      playSound('select');
+    });
+    
+    avatarsGrid.appendChild(avatarElement);
+  });
+}
+
+function saveProfile() {
+  const name = profileNameInput.value.trim();
+  if (name) {
+    userProfile.name = name.substring(0, 20);
+  }
+  
+  // اضافه کردن XP برای تغییر پروفایل
+  addXP(5);
+  
+  saveUserProfile();
+  updateProfileDisplay();
+  
+  setStatus('good', currentLanguage === 'fa' ? '✅ پروفایل با موفقیت ذخیره شد!' : 
+                    currentLanguage === 'en' ? '✅ Profile saved successfully!' :
+                    currentLanguage === 'ar' ? '✅ تم حفظ الملف الشخصي بنجاح!' :
+                    currentLanguage === 'ru' ? '✅ Профиль успешно сохранен!' : 
+                    '✅ プロフィールが正常に保存されました！');
+  
+  triggerAnimation(saveProfileBtn, 'success-bounce-animation');
+  triggerAnimation(document.querySelector('.profile-section'), 'glow-animation');
+  playSound('profile');
+  
+  // پاک کردن فیلد ورودی
+  profileNameInput.value = '';
+}
+
+// ==================== ابزارهای رنگ و Canvas ====================
+function parseRGBA(str){
+  const m = str.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?\)/);
+  if(!m) return [0,0,0,1];
+  return [parseInt(m[1]),parseInt(m[2]),parseInt(m[3]), m[4]?parseFloat(m[4]):1];
+}
+function mixRGBA(c1,c2,t){
+  const a = parseRGBA(c1), b = parseRGBA(c2);
+  const r = Math.round(a[0] + (b[0]-a[0])*t);
+  const g = Math.round(a[1] + (b[1]-a[1])*t);
+  const b2 = Math.round(a[2] + (b[2]-a[2])*t);
+  const alpha = a[3] + (b[3]-a[3])*t;
+  return `rgba(${r},${g},${b2},${alpha.toFixed(3)})`;
+}
+function easeInOut(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+function resize(){canvas.width = window.innerWidth; canvas.height = window.innerHeight;}
+resize(); window.addEventListener('resize', resize);
+
+const nodes = [];
+const LINKS = 5;
+for(let i=0;i<80;i++){
+  nodes.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    dx: (Math.random()-0.5)*1.2,
+    dy: (Math.random()-0.5)*1.2,
+    r: 3 + Math.random()*4
+  });
+}
+
+let lineColorMode = 0;
+
+const linePalettes = {
+  0: ["rgba(0,245,255,ALPHA)","rgba(0,255,136,ALPHA)"],
+  1: ["rgba(0,160,255,ALPHA)","rgba(0,90,210,ALPHA)"],
+  2: ["rgba(0,255,160,ALPHA)","rgba(0,200,90,ALPHA)"],
+  3: ["rgba(255,255,120,ALPHA)","rgba(210,180,0,ALPHA)"],
+  4: ["rgba(255,85,85,ALPHA)","rgba(255,120,120,ALPHA)"]
+};
+const glowPalettes = {
+  0: ["rgba(0,245,255,0.90)","rgba(0,255,136,0.50)"],
+  1: ["rgba(0,160,255,0.90)","rgba(0,90,210,0.50)"],
+  2: ["rgba(0,255,160,0.90)","rgba(0,200,90,0.50)"],
+  3: ["rgba(255,255,120,0.90)","rgba(210,180,0,0.50)"],
+  4: ["rgba(255,85,85,0.90)","rgba(255,120,120,0.50)"]
+};
+
+let lineCycleActive = false;
+let lineCycleT = 0;
+let lineCycleFrom = 0;
+let lineCycleTo = 1;
+
+let bgStyleMode = 0;
+
+function applyBgStyle(){
+  document.body.classList.remove('bg-neon-dark','bg-neon-white','bg-galaxy','bg-3d');
+  if(bgStyleMode===0) document.body.classList.add('bg-neon-dark');
+  if(bgStyleMode===1) document.body.classList.add('bg-neon-white');
+  if(bgStyleMode===2) document.body.classList.add('bg-galaxy');
+  if(bgStyleMode===3) document.body.classList.add('bg-3d');
+}
+
+function startLineCycle(){
+  if(lineCycleActive) return;
+  lineCycleActive = true;
+  lineCycleFrom = lineColorMode;
+  lineCycleTo = (lineColorMode+1)%5;
+  lineCycleT = 0;
+}
+function stopLineCycle(){ lineCycleActive = false; }
+
+// سیستم رندر بهینه‌شده
+let lastTime = 0;
+let frameCount = 0;
+let lastFpsUpdate = 0;
+let fps = 0;
+
+function drawBG(timestamp) {
+  requestAnimationFrame(drawBG);
+  
+  // محاسبه FPS
+  frameCount++;
+  if (timestamp >= lastFpsUpdate + 1000) {
+    fps = Math.round((frameCount * 1000) / (timestamp - lastFpsUpdate));
+    frameCount = 0;
+    lastFpsUpdate = timestamp;
+  }
+  
+  // کنترل فریم‌ریت برای عملکرد بهتر
+  const targetFPS = 60;
+  const frameInterval = 1000 / targetFPS;
+  
+  if (timestamp - lastTime < frameInterval) {
+    return;
+  }
+  lastTime = timestamp;
+  
+  // پاک کردن Canvas با روش بهینه‌تر
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if(lineCycleActive){
+    lineCycleT = Math.min(1, lineCycleT + 0.005);
+    if(lineCycleT>=1){
+      lineColorMode = lineCycleTo;
+      lineCycleFrom = lineColorMode;
+      lineCycleTo = (lineColorMode+1)%5;
+      lineCycleT = 0;
+    }
+  }
+
+  const tEase = easeInOut(lineCycleT);
+
+  // بهینه‌سازی: استفاده از Spatial Partitioning ساده
+  for(let i=0;i<nodes.length;i++){
+    const a = nodes[i];
+    let nearest = [];
+    
+    for(let j=Math.max(0, i-15); j<Math.min(nodes.length, i+15); j++){
+      if(i===j) continue;
+      const b = nodes[j];
+      const d = Math.hypot(a.x-b.x, a.y-b.y);
+      if(d<350) nearest.push({b, d});
+    }
+    
+    nearest.sort((m,n)=>m.d-n.d);
+    nearest = nearest.slice(0, LINKS);
+    
+    nearest.forEach(({b,d})=>{
+      const alphaBase = Math.max(0, 0.8 - d/350);
+      const grad = ctx.createLinearGradient(a.x,a.y,b.x,b.y);
+
+      const from = linePalettes[lineCycleActive ? lineCycleFrom : lineColorMode];
+      const to   = linePalettes[lineCycleActive ? lineCycleTo   : lineColorMode];
+      const c0From = from[0].replace('ALPHA', alphaBase.toFixed(3));
+      const c1From = from[1].replace('ALPHA', alphaBase.toFixed(3));
+      const c0To   = to[0].replace('ALPHA', alphaBase.toFixed(3));
+      const c1To   = to[1].replace('ALPHA', alphaBase.toFixed(3));
+
+      grad.addColorStop(0, mixRGBA(c0From, c0To, tEase));
+      grad.addColorStop(1, mixRGBA(c1From, c1To, tEase));
+
+      ctx.strokeStyle = grad; 
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); 
+      ctx.moveTo(a.x,a.y); 
+      ctx.lineTo(b.x,b.y); 
+      ctx.stroke();
+    });
+  }
+
+  nodes.forEach(n=>{
+    n.x += n.dx; 
+    n.y += n.dy;
+    
+    // بازگشت نرم‌تر از لبه‌ها
+    if(n.x<0){ n.x = 0; n.dx = Math.abs(n.dx)*0.9; }
+    if(n.x>canvas.width){ n.x = canvas.width; n.dx = -Math.abs(n.dx)*0.9; }
+    if(n.y<0){ n.y = 0; n.dy = Math.abs(n.dy)*0.9; }
+    if(n.y>canvas.height){ n.y = canvas.height; n.dy = -Math.abs(n.dy)*0.9; }
+
+    const fromG = glowPalettes[lineCycleActive ? lineCycleFrom : lineColorMode];
+    const toG   = glowPalettes[lineCycleActive ? lineCycleTo   : lineColorMode];
+
+    const glowRadius = n.r * 8;
+    const g = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,glowRadius);
+    g.addColorStop(0, mixRGBA(fromG[0], toG[0], tEase));
+    g.addColorStop(0.5, mixRGBA(fromG[1], toG[1], tEase));
+    g.addColorStop(1,"rgba(0,0,0,0)");
+
+    ctx.fillStyle = g;
+    ctx.beginPath(); 
+    ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    ctx.fill();
+    
+    // اضافه کردن یک مرز برای دانه‌ها برای وضوح بیشتر
+    ctx.fillStyle = mixRGBA(fromG[0], toG[0], tEase);
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,n.r*0.5,0,Math.PI*2);
+    ctx.fill();
+  });
+}
+drawBG();
+
+// ==================== توابع بازی ====================
+function renderHearts(){
+  heartsEl.innerHTML = '';
+  for(let i=0;i<hearts;i++){
+    const s = document.createElement('span');
+    s.className = 'heart';
+    s.textContent = '❤️';
+    heartsEl.appendChild(s);
+  }
+}
+renderHearts();
+
+function updateCounts(){
+  guessCountEl.textContent = guesses.toString();
+  sideGuessCountEl.textContent = guesses.toString();
+  scoreView.value = score.toString();
+}
+
+function addGuessToList(val, relation, heartsLost = 0){
+  const li = document.createElement('li');
+  li.classList.add('fade-in-up');
+  const left = document.createElement('div');
+  left.className = 'guessMeta';
+  const num = document.createElement('strong'); 
+  num.textContent = val.toString();
+  const badge = document.createElement('span'); 
+  badge.className = 'badge';
+
+  if(relation==='ok'){
+    badge.classList.add('badge-ok'); 
+    badge.textContent = currentLanguage === 'fa' ? '✅ درست' : 
+                        currentLanguage === 'en' ? '✅ Correct' :
+                        currentLanguage === 'ar' ? '✅ صحيح' : 
+                        currentLanguage === 'ru' ? '✅ Верно' : '✅ 正解';
+  }else if(relation==='high'){
+    badge.classList.add('badge-high'); 
+    badge.textContent = currentLanguage === 'fa' ? '⬆️ عدد پایین‌تره' : 
+                        currentLanguage === 'en' ? '⬆️ Number is lower' :
+                        currentLanguage === 'ar' ? '⬆️ الرقم أقل' : 
+                        currentLanguage === 'ru' ? '⬆️ Число меньше' : '⬆️ 数字は低い';
+  }else if(relation==='low'){
+    badge.classList.add('badge-low'); 
+    badge.textContent = currentLanguage === 'fa' ? '⬇️ عدد بالاتره' : 
+                        currentLanguage === 'en' ? '⬇️ Number is higher' :
+                        currentLanguage === 'ar' ? '⬇️ الرقم أعلى' : 
+                        currentLanguage === 'ru' ? '⬇️ Число больше' : '⬇️ 数字は高い';
+  }else if(relation==='warn'){
+    badge.classList.add('badge-warn'); 
+    badge.textContent = currentLanguage === 'fa' ? `🟨 خارج از محدوده` : 
+                        currentLanguage === 'en' ? `🟨 Out of range` :
+                        currentLanguage === 'ar' ? `🟨 خارج النطاق` : 
+                        currentLanguage === 'ru' ? `🟨 Вне диапазона` : `🟨 範囲外`;
+  }else if(relation==='red'){
+    badge.classList.add('badge-red-card'); 
+    badge.textContent = currentLanguage === 'fa' ? `🟥 کارت قرمز! ${heartsLost} قلب` : 
+                        currentLanguage === 'en' ? `🟥 Red card! ${heartsLost} hearts` :
+                        currentLanguage === 'ar' ? `🟥 بطاقة حمراء! ${heartsLost} قلب` : 
+                        currentLanguage === 'ru' ? `🟥 Красная карта! ${heartsLost} сердец` : `🟥 レッドカード! ${heartsLost} ハート`;
+  }
+
+  left.appendChild(num); 
+  left.appendChild(badge);
+  const right = document.createElement('span');
+  right.style.opacity = .7; 
+  right.textContent = '#'+guesses;
+  li.appendChild(left); 
+  li.appendChild(right);
+  guessListEl.appendChild(li);
+  guessListEl.scrollTop = guessListEl.scrollHeight;
+}
+
+function setStatus(type, text){
+  statusEl.className = 'status ' + (type||'');
+  statusEl.textContent = text;
+  statusEl.classList.add('fade-in-up');
+  setTimeout(() => {
+    statusEl.classList.remove('fade-in-up');
+  }, 500);
+}
+
+function getTranslatedStatus(key, params = {}) {
+  const statusMessages = {
+    fa: {
+      win: '🎉 درست حدس زدی! تبریک!',
+      lose: '💀 قلب‌هات تموم شد!',
+      buyLimit: '🟨 خرید قلب محدود است! فقط ۲ بار مجاز بود.',
+      heartAdded: (buyLeft) => `❤️ یک قلب اضافه شد! باقی‌مانده خرید: ${buyLeft}`,
+      invalidNumber: '🟨 لطفاً یک عدد معتبر وارد کن.',
+      outOfRange: (heartsLost) => `🟨 کارت زرد! ${heartsLost} قلب کم شد.`,
+      outOfRangeRed: (heartsLost) => `🟥 کارت قرمز! ${heartsLost} قلب کم شد.`,
+      correct: '🎯 عالی! دقیقاً درست حدس زدی.',
+      guessHigh: '↘️ عدد پایین‌تره.',
+      guessLow: '↗️ عدد بالاتره.',
+      rangeSet: (minVal, maxVal) => `📐 بازه تنظیم شد: ${minVal} تا ${maxVal} — عدد هدف جدید انتخاب شد.`,
+      minTooLow: '🟨 حداقل نمی‌تواند کمتر از ۱ باشد.',
+      maxTooLow: '🟨 حداکثر باید بزرگ‌تر از حداقل باشد.',
+      scoreReset: '🔄 امتیاز جاری به ۰ ریست شد.',
+      invalidRange: '🟨 لطفاً حداقل و حداکثر را صحیح وارد کن.',
+      bonusActivated: '🎁 کد جایزه فعال شد! صفحه قرمز شد.',
+      bonusReset: '🔄 صفحه به حالت عادی برگشت.',
+      bonusInvalid: '🟨 کد صحیح نیست.',
+      hint: (minVal, maxVal) => `💡 راهنمایی: بازه‌ی درست ${minVal} تا ${maxVal} است. خارج از این محدوده کارت زرد/قرمز می‌گیری.`,
+      listCleared: '🧹 لیست حدس‌ها پاک شد.',
+      lineColorSet: (color) => `🎨 رنگ خطوط: ${color}`,
+      lineCycleStarted: '▶️ چرخه نرم رنگ خطوط فعال شد.',
+      lineCycleStopped: '⏹️ چرخه نرم رنگ خطوط متوقف شد.',
+      bgStyleSet: (style) => `🌌 نوع پس‌زمینه: ${style}`,
+      stillCanBuy: '💖 هنوز می‌توانی خرید کنی!',
+      buyHeartsLeft: (count) => `💖 هنوز ${count} قلب می‌توانی خریداری کنی`,
+      improvedMessage: (oldScore, newScore) => `🏆 آفرین! پیشرفت کردی! امتیازت از ${oldScore} به ${newScore} رسید`,
+      secretNumberReveal: (target) => `🔢 عدد مخفی ${target} بود! دفعه بعد موفق می‌شوی! 💪`
+    },
+    en: {
+      win: '🎉 You guessed correctly! Congratulations!',
+      lose: '💀 Your hearts are finished!',
+      buyLimit: '🟨 Heart purchase is limited! Only 2 times allowed.',
+      heartAdded: (buyLeft) => `❤️ One heart added! Remaining purchases: ${buyLeft}`,
+      invalidNumber: '🟨 Please enter a valid number.',
+      outOfRange: (heartsLost) => `🟨 Yellow card! ${heartsLost} heart${heartsLost > 1 ? 's' : ''} lost.`,
+      outOfRangeRed: (heartsLost) => `🟥 Red card! ${heartsLost} hearts lost.`,
+      correct: '🎯 Excellent! You guessed exactly right.',
+      guessHigh: '↘️ Number is lower.',
+      guessLow: '↗️ Number is higher.',
+      rangeSet: (minVal, maxVal) => `📐 Range set: ${minVal} to ${maxVal} — new target number selected.`,
+      minTooLow: '🟨 Minimum cannot be less than 1.',
+      maxTooLow: '🟨 Maximum must be greater than minimum.',
+      scoreReset: '🔄 Current score reset to 0.',
+      invalidRange: '🟨 Please enter valid minimum and maximum.',
+      bonusActivated: '🎁 Bonus code activated! Page turned red.',
+      bonusReset: '🔄 Page returned to normal.',
+      bonusInvalid: '🟨 Code is not correct.',
+      hint: (minVal, maxVal) => `💡 Hint: The correct range is ${minVal} to ${maxVal}. Outside this range you get yellow/red card.`,
+      listCleared: '🧹 Guess list cleared.',
+      lineColorSet: (color) => `🎨 Line color: ${color}`,
+      lineCycleStarted: '▶️ Smooth line color cycle activated.',
+      lineCycleStopped: '⏹️ Smooth line color cycle stopped.',
+      bgStyleSet: (style) => `🌌 Background type: ${style}`,
+      stillCanBuy: '💖 You can still buy!',
+      buyHeartsLeft: (count) => `💖 You can still buy ${count} heart${count > 1 ? 's' : ''}`,
+      improvedMessage: (oldScore, newScore) => `🏆 Congratulations! You improved! Your score went from ${oldScore} to ${newScore}`,
+      secretNumberReveal: (target) => `🔢 The secret number was ${target}! You'll get it next time! 💪`
+    }
+  };
+  
+  const message = statusMessages[currentLanguage][key];
+  if (typeof message === 'function') {
+    return message(...Object.values(params));
+  }
+  return message;
+}
+
+// ==================== بهبود تابع checkGameOver با نمایش عدد مخفی ====================
+function checkGameOver(win=false){
+  if(win){
+    setStatus('good', getTranslatedStatus('win'));
+    endGame(true);
+    return true;
+  }
+  
+  // بررسی آیا قلب‌ها تمام شده اما هنوز امکان خرید وجود دارد
+  if(hearts <= 0 && buyLeft > 0){
+    const buyMessage = getTranslatedStatus('buyHeartsLeft', {count: buyLeft});
+    setStatus('warn', buyMessage);
+    
+    guessBtn.disabled = true;
+    guessInput.disabled = true;
+    
+    buyBtn.disabled = false;
+    triggerAnimation(buyBtn, 'glow-animation');
+    playSound('heart');
+    
+    return false;
+  }
+  
+  if(hearts <= 0 && buyLeft <= 0){
+    setStatus('bad', getTranslatedStatus('lose'));
+    // نمایش عدد مخفی هنگام باخت
+    const secretMessage = getTranslatedStatus('secretNumberReveal', {target: target});
+    setStatus('bad', secretMessage);
+    endGame(false);
+    return true;
+  }
+  
+  return false;
+}
+
+function endGame(win){
+  const final = win ? (hearts*10 - guesses*2) : (guesses*-5);
+  score = final;
+  
+  let improvementMessage = '';
+  if (lastGameScore > 0 && final > lastGameScore) {
+    improvementMessage = ' ' + getTranslatedStatus('improvedMessage', {old: lastGameScore, new: final});
+    triggerAnimation(finalScoreEl, 'success-bounce-animation');
+  }
+  
+  const finalText = (currentLanguage === 'fa' ? `امتیاز نهایی: ${final}` : 
+                    currentLanguage === 'en' ? `Final score: ${final}` :
+                    currentLanguage === 'ar' ? `النتيجة النهائية: ${final}` : 
+                    currentLanguage === 'ru' ? `Финальный счет: ${final}` :
+                    `最終スコア: ${final}`) + improvementMessage;
+  
+  finalScoreEl.textContent = finalText;
+  restartBtn.style.display = 'inline-block';
+  guessBtn.disabled = true;
+  guessInput.disabled = true;
+  buyBtn.disabled = true;
+  updateCounts();
+  
+  // به‌روزرسانی پروفایل کاربر و اضافه کردن XP
+  if (win) {
+    userProfile.totalGames++;
+    userProfile.totalWins++;
+    addXP(10);
+  } else {
+    userProfile.totalGames++;
+    addXP(3);
+  }
+  saveUserProfile();
+  updateProfileDisplay();
+  
+  // ذخیره امتیاز این بازی برای مقایسه بعدی
+  localStorage.setItem('lastGameScore', final);
+  lastGameScore = final;
+  
+  // پخش صدای مناسب
+  if (win) {
+    playSound('win');
+    triggerAnimation(finalScoreEl, 'success-bounce-animation');
+    triggerAnimation(document.querySelector('.panel'), 'rotate-3d');
+  } else {
+    playSound('lose');
+  }
+  
+  // ذخیره وضعیت بازی
+  saveGameState();
+}
+
+function restartGame(){
+  target = Math.floor(Math.random()*(maxVal-minVal+1))+minVal;
+  hearts = 8;
+  buyLeft = 2; 
+  guesses = 0; 
+  score = 0;
+  yellowCardCount = 0;
+  renderHearts(); 
+  updateCounts();
+  guessListEl.innerHTML = '';
+  setStatus('', translations[currentLanguage].initialMessage);
+  finalScoreEl.textContent = translations[currentLanguage].finalScoreDefault;
+  restartBtn.style.display = 'none';
+  guessBtn.disabled = false;
+  guessInput.disabled = false;
+  buyBtn.disabled = false;
+  applyBgStyle();
+  
+  // انیمیشن و صدا برای دکمه شروع مجدد
+  triggerAnimation(restartBtn, 'restart-flip-animation');
+  triggerAnimation(document.querySelector('.panel'), 'fade-in-up');
+  playSound('reset');
+  
+    // ذخیره وضعیت جدید
+  saveGameState();
+}
+
+function applyLanguageFromSettings() {
+  const selectedLang = languageSelect.value;
+  updatePageLanguage(selectedLang);
+  setStatus('', currentLanguage === 'fa' ? '✅ زبان با موفقیت تغییر کرد' : 
+                      currentLanguage === 'en' ? '✅ Language changed successfully' :
+                      currentLanguage === 'ar' ? '✅ تم تغيير اللغة بنجاح' :
+                      currentLanguage === 'ru' ? '✅ Язык успешно изменен' :
+                      '✅ 言語が正常に変更されました');
+  
+  triggerAnimation(applyLanguageBtn, 'success-bounce-animation');
+  triggerAnimation(document.querySelector('.header'), 'fade-in-up');
+  playSound('select');
+}
+
+// ==================== سیستم هوش مصنوعی ====================
+function toggleAIChat() {
+  const isActive = aiChatPanel.classList.toggle('active');
+  aiAssistantBtn.classList.toggle('active', isActive);
+  
+  if (isActive) {
+    playSound('ai');
+    triggerAnimation(aiChatPanel, 'slide-in-right');
+    aiInput.focus();
+    
+    // پنهان کردن بادج اگر باز است
+    aiBadge.style.display = 'none';
+  } else {
+    playSound('menu');
+  }
+}
+
+async function sendAIMessage() {
+  const question = aiInput.value.trim();
+  if (!question) return;
+  
+  // اضافه کردن پیام کاربر
+  addAIMessage(question, true);
+  aiInput.value = '';
+  aiSendBtn.disabled = true;
+  
+  // پردازش سوال و دریافت پاسخ
+  const response = processAIQuestion(question);
+  
+  // شبیه‌سازی تایپ کردن و نمایش پاسخ
+  await simulateTyping(response);
+  
+  aiSendBtn.disabled = false;
+  playSound('ai');
+}
+
+function handleQuickQuestion(question) {
+  aiInput.value = question;
+  sendAIMessage();
+}
+
+// ==================== سیستم ذخیره خودکار ====================
+function saveGameState() {
+  const gameState = {
+    minVal,
+    maxVal,
+    target,
+    hearts,
+    buyLeft,
+    guesses,
+    score,
+    yellowCardCount,
+    timestamp: Date.now()
+  };
+  
+  localStorage.setItem('gameState', JSON.stringify(gameState));
+}
+
+function loadGameState() {
+  const saved = localStorage.getItem('gameState');
+  if (saved) {
+    try {
+      const state = JSON.parse(saved);
+      const now = Date.now();
+      const hoursPassed = (now - state.timestamp) / (1000 * 60 * 60);
+      
+      // فقط اگر کمتر از 24 ساعت گذشته باشد بازیابی کن
+      if (hoursPassed < 24) {
+        minVal = state.minVal || minVal;
+        maxVal = state.maxVal || maxVal;
+        target = state.target || target;
+        hearts = state.hearts || hearts;
+        buyLeft = state.buyLeft || buyLeft;
+        guesses = state.guesses || guesses;
+        score = state.score || score;
+        yellowCardCount = state.yellowCardCount || yellowCardCount;
+        
+        renderHearts();
+        updateCounts();
+        
+        setStatus('', currentLanguage === 'fa' ? '🔄 وضعیت بازی بازیابی شد!' : 
+                        currentLanguage === 'en' ? '🔄 Game state restored!' :
+                        currentLanguage === 'ar' ? '🔄 تمت استعادة حالة اللعبة!' : 
+                        currentLanguage === 'ru' ? '🔄 Состояние игры восстановлено!' : 
+                        '🔄 ゲーム状態を復元しました！');
+        
+        return true;
+      }
+    } catch (e) {
+      console.error('Error loading game state:', e);
+    }
+  }
+  return false;
+}
+
+// ==================== بارگذاری اولیه ====================
+function initializeGame() {
+  // بارگذاری پروفایل کاربر
+  loadUserProfile();
+  
+  // بارگذاری وضعیت بازی
+  loadGameState();
+  
+  // تنظیم زبان انتخابی در dropdown
+  if (savedLang) {
+    languageSelect.value = savedLang;
+  }
+  
+  // بارگذاری آخرین امتیاز
+  if (localStorage.getItem('lastGameScore')) {
+    lastGameScore = parseInt(localStorage.getItem('lastGameScore'));
+  }
+  
+  // تنظیم تایمر ذخیره خودکار (هر 30 ثانیه)
+  setInterval(saveGameState, 30000);
+  
+  // اعمال بهینه‌سازی‌های عملکرد
+  applyPerformanceOptimizations();
+  
+  // تنظیم اولیه برای هوش مصنوعی
+  aiBadge.style.display = 'none';
+}
+
+// ==================== بهینه‌سازی عملکرد ====================
+function applyPerformanceOptimizations() {
+  // غیرفعال کردن انیمیشن‌های سنگین در دستگاه‌های ضعیف
+  if ('hardwareConcurrency' in navigator && navigator.hardwareConcurrency < 4) {
+    document.body.classList.add('performance-optimized');
+  }
+  
+  // کاهش انیمیشن‌ها در حالت باتری
+  if ('getBattery' in navigator) {
+    navigator.getBattery().then(battery => {
+      if (battery.charging === false && battery.level < 0.3) {
+        document.body.classList.add('performance-optimized');
+      }
+    });
+  }
+  
+  // حذف انیمیشن‌ها برای کاربرانی که ترجیح می‌دهند
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.body.classList.add('performance-optimized');
+  }
+}
+
+// ==================== Event Listeners ====================
+// دکمه‌های رنگ خطوط
+lineBlueBtn.addEventListener('click', ()=>{ setLineMode(1); });
+lineGreenBtn.addEventListener('click', ()=>{ setLineMode(2); });
+lineYellowBtn.addEventListener('click', ()=>{ setLineMode(3); });
+lineRedBtn.addEventListener('click', ()=>{ setLineMode(4); });
+
+// سایر دکمه‌ها
+cycleLinesBtn.addEventListener('click', toggleLineCycle);
+buyBtn.addEventListener('click', buyHeart);
+guessBtn.addEventListener('click', makeGuess);
+settingsBtn.addEventListener('click', toggleSettings);
+saveProfileBtn.addEventListener('click', saveProfile);
+bonusBtn.addEventListener('click', checkBonus);
+restartBtn.addEventListener('click', restartGame);
+rangeBtn.addEventListener('click', applyRange);
+resetScoreBtn.addEventListener('click', resetScore);
+hintBtn.addEventListener('click', showHint);
+clearListBtn.addEventListener('click', clearList);
+
+// دکمه‌های استایل پس‌زمینه
+bgStyleNeonDarkBtn.addEventListener('click', ()=>setBgStyleMode(0));
+bgStyleNeonWhiteBtn.addEventListener('click', ()=>setBgStyleMode(1));
+bgStyleGalaxyBtn.addEventListener('click', ()=>setBgStyleMode(2));
+bgStyle3DBtn.addEventListener('click', ()=>setBgStyleMode(3));
+
+// زبان
+applyLanguageBtn.addEventListener('click', applyLanguageFromSettings);
+
+// هوش مصنوعی
+aiAssistantBtn.addEventListener('click', toggleAIChat);
+aiCloseBtn.addEventListener('click', toggleAIChat);
+aiSendBtn.addEventListener('click', sendAIMessage);
+aiInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !aiSendBtn.disabled) {
+    sendAIMessage();
+  }
+});
+
+// دکمه‌های سریع هوش مصنوعی
+aiQuickButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const question = btn.getAttribute('data-question');
+    handleQuickQuestion(question);
+  });
+});
+
+// ورودی حدس
+guessInput.addEventListener('keydown', (e)=>{
+  if(e.key==='Enter' && !guessBtn.disabled) {
+    makeGuess();
+  }
+});
+
+// اضافه کردن انیمیشن و صدا به کلیک روی دکمه‌های منو
+document.querySelectorAll('.menuBtn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    triggerAnimation(this, 'menu-slide-animation');
+    playSound('menu');
+  });
+});
+
+// اضافه کردن انیمیشن و صدا به کلیک روی دکمه‌های اصلی
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const id = this.id;
+    if (!id || !['buyBtn', 'guessBtn', 'settingsBtn', 'bonusBtn', 'restartBtn', 'rangeBtn', 'resetScoreBtn', 'applyLanguageBtn', 'saveProfileBtn', 'aiSendBtn'].includes(id)) {
+      playSound('click');
+    }
+    
+    if (!this.classList.contains('btn-animate')) {
+      this.classList.add('btn-animate');
+      setTimeout(() => {
+        this.classList.remove('btn-animate');
+      }, 300);
+    }
+  });
+});
+
+// انیمیشن ورود اولیه
+window.addEventListener('load', function() {
+  setTimeout(() => {
+    document.querySelector('.wrap').classList.add('fade-in-up');
+    document.querySelector('.header').classList.add('slide-in-right');
+    document.querySelector('.ai-assistant-btn').classList.add('fade-in-up');
+    
+    // مقداردهی اولیه بازی
+    initializeGame();
+  }, 100);
+});
+
+// جلوگیری از تاخیر لمسی
+document.addEventListener('touchstart',()=>{}, {passive:true});
+
+// ==================== مقداردهی اولیه ====================
+applyBgStyle();
+updateCounts();
+
+// مقداردهی اولیه بازی (در صورت لود نشدن در event listener)
+setTimeout(initializeGame, 500);
+</script>
+</body>
+</html>
